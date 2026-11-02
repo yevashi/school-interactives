@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Химический сортировщик · 6 класс</title>
+<style>
+:root{--bg:#07162b;--panel:#102744;--panel2:#153252;--white:#f1f8ff;--muted:#b4cadc;--line:#355574;--cyan:#71e6e0;--amber:#ffd78e;--green:#93f1b8;--red:#ffb1b0}
+*{box-sizing:border-box}html,body{margin:0;min-height:100%;font-family:Arial,Helvetica,sans-serif;background:radial-gradient(circle at 70% 0,#173c65,var(--bg) 63%);color:var(--white)}
+button{font:inherit;cursor:pointer}button:focus-visible,.tile:focus-visible,.target:focus-visible{outline:4px solid #ffe08b;outline-offset:3px}
+.wrap{max-width:1540px;margin:auto;padding:18px 22px 28px}
+.top{display:flex;justify-content:space-between;align-items:center;gap:15px;flex-wrap:wrap}.eyebrow{font-weight:bold;letter-spacing:.15em;color:var(--cyan);font-size:13px}.brand h1{font-size:clamp(26px,3.4vw,43px);margin:5px 0 8px;font-weight:800}.subtitle{font-size:clamp(14px,1.5vw,19px);color:var(--muted);line-height:1.35;margin:0}
+.tools{display:flex;gap:8px;flex-wrap:wrap}.tool,.tab{border:1px solid #45637f;border-radius:13px;background:#163557;color:#fff;padding:10px 16px;font-weight:bold}.tool:hover,.tab:hover{background:#225078}.tool:active,.tab:active{transform:translateY(1px)}
+.nav{display:flex;gap:10px;flex-wrap:wrap;margin:20px 0 14px}.tab{font-size:clamp(13px,1.3vw,17px);padding:13px 16px;flex:1;min-width:210px;text-align:left}.tab small{display:block;color:#b4cee0;font-weight:normal;margin-top:5px}.tab.active{background:#176e7b;border-color:var(--cyan);box-shadow:0 0 0 2px #57ded750}
+.summary{display:flex;gap:15px;align-items:center;justify-content:space-between;flex-wrap:wrap;border:1px solid var(--line);background:#0c2441;padding:12px 15px;border-radius:14px;margin-bottom:13px}.prompt{font-size:clamp(16px,2vw,23px);font-weight:700}.progress{display:flex;align-items:center;gap:12px;font-size:16px;color:var(--muted)}.count{color:#fff;font-weight:800;font-size:25px}.meter{width:125px;height:10px;background:#233952;border-radius:999px;overflow:hidden}.bar{height:100%;width:0;background:linear-gradient(90deg,#36bdba,#9ef4ad);transition:width .25s}
+.bank-title{color:#b8d3e7;text-transform:uppercase;font-size:13px;letter-spacing:.12em;margin:12px 0 10px;font-weight:800}.bank{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;min-height:136px}.tile{min-width:0;position:relative;touch-action:none;user-select:none;border:1px solid #6986aa;background:linear-gradient(135deg,#ecf7ff,#d6eafe);color:#133354;border-radius:13px;padding:11px 12px;min-height:110px;cursor:grab;text-align:left;display:flex;flex-direction:column;gap:5px;justify-content:space-between;box-shadow:0 5px 9px #03122455;transition:border-color .12s, transform .12s}.tile:hover{border-color:#f5df8a;transform:translateY(-2px)}.tile.is-selected{outline:4px solid var(--amber);outline-offset:2px}.tile .chem{font-weight:800;font-size:clamp(17px,2vw,26px)}.tile .desc{font-size:clamp(12px,1.16vw,15px);color:#345574}.balls{display:flex;align-items:center;gap:2px;flex-wrap:wrap;min-height:25px}.atom{display:inline-flex;justify-content:center;align-items:center;border-radius:100%;width:23px;height:23px;font-size:11px;font-weight:900;border:1px solid #526b81;box-shadow:inset -2px -3px 4px #0003;color:#172839}.atom.O{background:#fa868b}.atom.H{background:#f5f6fa}.atom.C{background:#a9b6c6}.atom.N{background:#8cc6fb}.atom.Fe{background:#e7c983;width:27px;height:27px;font-size:9px}.bond{width:9px;height:4px;background:#738392;border-radius:9px}.tile.placed{display:none}
+.targets{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:13px;margin-top:15px}.target{border:3px dashed #547591;border-radius:17px;min-height:194px;padding:13px;background:#102944;display:flex;flex-direction:column;gap:9px;text-align:left;color:#fff}.target:hover,.target.hover{border-color:var(--cyan);background:#174363}.target .big{font-size:clamp(20px,2.5vw,30px);font-weight:800}.target .hint{font-size:clamp(12px,1.2vw,16px);color:#bfd4e6}.target .mini{display:flex;flex-wrap:wrap;gap:6px;min-height:35px;align-content:flex-start}.placed-chip{border:1px solid #5b8b9c;background:#244b63;border-radius:8px;padding:7px 10px;font-weight:700;font-size:clamp(13px,1.15vw,16px)}
+.message{min-height:56px;margin-top:14px;border:1px solid #436482;border-radius:13px;background:#102943;padding:12px 16px;color:#d6eaff;line-height:1.35;font-size:clamp(14px,1.5vw,19px)}.message.good{border-color:#61bd9c;background:#124735;color:#d9ffe8}.message.bad{border-color:#e29b95;background:#4a242d;color:#ffe2dd}
+.foot{margin-top:13px;display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;color:var(--muted);font-size:13px}.foot .tool{font-size:14px}.ghost{position:fixed;z-index:9999;pointer-events:none;opacity:.93;transform:rotate(-2deg) scale(.97);width:230px;max-height:140px;overflow:hidden}.finished{border:1px solid #6cbd93;border-radius:13px;color:#cbffe0;background:#164a38;padding:10px 14px;font-weight:800}
+@media(max-width:900px){.bank{grid-template-columns:repeat(2,minmax(0,1fr))}.wrap{padding:12px}.targets{gap:8px}.target{min-height:170px}.tile{min-height:91px}.atom{width:21px;height:21px}.top{align-items:flex-start}}
+@media(max-width:520px){.targets{grid-template-columns:1fr}.tile{min-height:91px}.tab{min-width:160px}.target{min-height:135px}}
+@media print{.wrap{background:white;color:black}.tile,.target{color:black}}
+</style>
+</head>
+<body>
+<main class="wrap">
+  <header class="top">
+    <div class="brand"><div class="eyebrow">ЕСТЕСТВОЗНАНИЕ · 6 КЛАСС · 6.3.1.1</div><h1>Химический сортировщик <span aria-hidden="true">⚛</span></h1><p class="subtitle">Перетяни карточку в нужную область или нажми на неё, а затем на ответ. После выбора объясни его классу.</p></div>
+    <div class="tools"><button class="tool" id="reset">↻ Начать раунд заново</button><button class="tool" id="full">⛶ На весь экран</button></div>
+  </header>
+  <div class="nav" id="nav" role="tablist" aria-label="Раунды игры"></div>
+  <div class="summary"><div class="prompt" id="prompt"></div><div class="progress"><span>Верно:</span><span class="count" id="progressText">0 / 8</span><div class="meter"><div class="bar" id="bar"></div></div></div></div>
+  <div class="bank-title">Карточки для распределения <span style="font-weight:normal;letter-spacing:0">· вызови ученика к доске</span></div>
+  <section class="bank" id="bank" aria-label="Карточки"></section>
+  <section class="targets" id="targets" aria-label="Области для ответов"></section>
+  <div class="message" id="message" role="status" aria-live="polite">Выбери карточку и объясни, почему она относится к этой категории.</div>
+  <footer class="foot"><div>Цвета атомов — условные. Модели отражают состав, но не геометрию молекул. Fe обозначает простое вещество с атомным строением.</div><button class="tool" id="next">Следующий раунд →</button></footer>
+</main>
+<script>
+(() => {
+const rounds=[
+ {tab:'1 · Атом или молекула?',minor:'Смотри на отдельную частицу',prompt:'Один атом или группа химически связанных атомов?', bins:[['atom','АТОМ','Одна частица химического элемента'],['mol','МОЛЕКУЛА','Группа связанных атомов']],items:[
+   ['a1','O','Один атом кислорода',['O'],'atom','О — отдельный атом кислорода.'],
+   ['a2','H','Один атом водорода',['H'],'atom','H — отдельный атом водорода.'],
+   ['a3','C','Один атом углерода',['C'],'atom','C — отдельный атом углерода.'],
+   ['a4','Fe','Один атом железа',['Fe'],'atom','Fe обозначает атом железа; само по себе это не молекула.'],
+   ['a5','O₂','Два связанных атома кислорода',['O','O'],'mol','O₂ — молекула из двух атомов кислорода.'],
+   ['a6','H₂O','Два H и один O',['H','O','H'],'mol','H₂O — молекула воды из трёх атомов.'],
+   ['a7','CO₂','Один C и два O',['O','C','O'],'mol','CO₂ — молекула углекислого газа.'],
+   ['a8','O₃','Три связанных атома O',['O','O','O'],'mol','O₃ — молекула озона из трёх атомов кислорода.']
+ ]},
+ {tab:'2 · Простое или сложное?',minor:'Сколько разных элементов?',prompt:'В составе вещества атомы одного или нескольких элементов?',bins:[['simple','ПРОСТОЕ ВЕЩЕСТВО','Атомы одного химического элемента'],['complex','СЛОЖНОЕ ВЕЩЕСТВО','Атомы двух или более элементов']], items:[
+   ['b1','O₂ · кислород','Один химический элемент',['O','O'],'simple','В O₂ только атомы кислорода — простое вещество.'],
+   ['b2','O₃ · озон','Тоже только кислород',['O','O','O'],'simple','Озон O₃ — простое вещество, хотя отличается от O₂.'],
+   ['b3','H₂ · водород','Атомы одного элемента',['H','H'],'simple','В H₂ только атомы водорода.'],
+   ['b4','Fe · железо','Металл: не отдельные молекулы',['Fe','Fe','Fe'],'simple','Железо состоит из атомов одного элемента, поэтому это простое вещество.'],
+   ['b5','H₂O · вода','Водород + кислород',['H','O','H'],'complex','Вода содержит атомы двух разных элементов.'],
+   ['b6','CO₂ · углекислый газ','Углерод + кислород',['O','C','O'],'complex','В CO₂ атомы углерода и кислорода.'],
+   ['b7','NH₃ · аммиак','Азот + водород',['H','N','H','H'],'complex','В NH₃ атомы азота и водорода.'],
+   ['b8','CH₄ · метан','Углерод + водород',['H','C','H','H','H'],'complex','В CH₄ атомы углерода и водорода.']
+ ]},
+ {tab:'3 · Найди ошибку',minor:'Отличи факт от заблуждения',prompt:'Утверждение верное или неверное?',bins:[['yes','ВЕРНО','Объясни, почему это правда'],['no','НЕВЕРНО','Исправь ошибку в утверждении']],items:[
+   ['c1','O₂ — простое вещество','Только атомы кислорода',[],'yes','Верно: атомы одного элемента.'],
+   ['c2','Вода H₂O — простое вещество','В ней три атома',[],'no','Нет: три атома, но два разных элемента — H и O.'],
+   ['c3','Молекула CO₂ содержит 3 атома','1 C и 2 O',[],'yes','Верно: 1+2=3 атома в молекуле.'],
+   ['c4','Каждое вещество состоит из молекул','Без исключений',[],'no','Нет: например, железо имеет атомное строение, а NaCl — ионное.'],
+   ['c5','O₂ и O₃ — разные молекулы','Содержат атомы кислорода',[],'yes','Верно: в O₂ два атома O, в O₃ три атома O.'],
+   ['c6','Один атом O — это молекула O₂','Ведь символ одинаковый',[],'no','Нет: атом O — одна частица; молекула O₂ состоит из двух связанных атомов.'],
+   ['c7','Аммиак NH₃ — сложное вещество','Есть N и H',[],'yes','Верно: атомы двух разных элементов.'],
+   ['c8','Молекула из 3 одинаковых атомов — сложное вещество','Ведь атомов больше одного',[],'no','Нет: решает число разных элементов, а не количество атомов.']
+ ]}
+];
+let round=0,placed={},chosen=null,drag=null,wrongCount=0;
+const $=id=>document.getElementById(id);
+function atomHTML(s){const cls=s==='Fe'?'Fe':s;return `<span class="atom ${cls}">${s}</span>`}
+function picture(arr){return arr.length?`<div class="balls" aria-hidden="true">${arr.map((x,i)=> (i?'<span class="bond"></span>':'')+atomHTML(x)).join('')}</div>`:''}
+function textHTML(t){return t.replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;')}
+function message(t,kind=''){const el=$('message');el.className='message'+(kind?' '+kind:'');el.textContent=t}
+function render(){const r=rounds[round];chosen=null;drag=null;wrongCount=0;placed={};
+ $('nav').innerHTML=rounds.map((rr,i)=>`<button class="tab ${i===round?'active':''}" role="tab" aria-selected="${i===round}" data-round="${i}">${rr.tab}<small>${rr.minor}</small></button>`).join('');
+ $('nav').querySelectorAll('[data-round]').forEach(el=>el.addEventListener('click',()=>{round=+el.dataset.round;render()}));
+ $('prompt').textContent=r.prompt;
+ $('bank').innerHTML=r.items.map(([id,formula,desc,atoms])=>`<button class="tile" type="button" data-id="${id}" aria-label="${textHTML(formula)}. ${textHTML(desc)}"><span class="chem">${textHTML(formula)}</span>${picture(atoms)}<span class="desc">${textHTML(desc)}</span></button>`).join('');
+ $('targets').innerHTML=r.bins.map(([id,label,hint])=>`<button class="target" type="button" data-bin="${id}"><span class="big">${label}</span><span class="hint">${hint}</span><span class="mini" data-chips="${id}"></span></button>`).join('');
+ $('bank').querySelectorAll('.tile').forEach(el=>{
+   el.addEventListener('click',()=>select(el.dataset.id));
+   el.addEventListener('pointerdown', startDrag);
+ });
+ $('targets').querySelectorAll('.target').forEach(el=>{
+   el.addEventListener('click',()=>attempt(el.dataset.bin));
+   el.addEventListener('pointerenter',()=>el.classList.add('hover'));
+   el.addEventListener('pointerleave',()=>el.classList.remove('hover'));
+ });
+ msgDefault();update();
+}
+function msgDefault(){message('Перетащи модель в категорию или нажми на карточку → категорию. Попроси ученика объяснить выбор.')}
+function select(id){if(placed[id])return;chosen=id;document.querySelectorAll('.tile').forEach(el=>el.classList.toggle('is-selected',el.dataset.id===id));const it=rounds[round].items.find(x=>x[0]===id);message('Выбрана карточка «'+it[1]+'». Куда её отнести?')}
+function attempt(bin, id=chosen){if(!id||placed[id]){if(!id)message('Сначала выбери карточку.');return} const r=rounds[round],it=r.items.find(x=>x[0]===id);if(!it)return;
+ if(it[4]===bin){placed[id]=bin;chosen=null; const tile=document.querySelector(`.tile[data-id="${id}"]`);if(tile)tile.classList.add('placed');let chip=document.createElement('span');chip.className='placed-chip';chip.textContent=it[1];document.querySelector(`[data-chips="${bin}"]`).appendChild(chip);message('✓ Правильно! '+it[5],'good');update();}
+ else {wrongCount++;message('↻ Пока не получилось. Подумай ещё: '+(round===0?'одна частица или связанные атомы?':round===1?'сколько РАЗНЫХ элементов?':'что именно утверждается?'),'bad')}
+}
+function update(){let count=Object.keys(placed).length,total=rounds[round].items.length;$('progressText').textContent=count+' / '+total;$('bar').style.width=(count/total*100)+'%';if(count===total) message('✓ Раунд завершён! '+(wrongCount?'Ошибки исправлены. ':'')+'Попроси класс сформулировать общее правило.','good')}
+function startDrag(e){if(e.button!==0 && e.pointerType==='mouse')return;let target=e.currentTarget;const id=target.dataset.id;if(placed[id])return;
+ // Touch and interactive panels use custom pointer drag; short tap still selects.
+ const startX=e.clientX,startY=e.clientY;let ghost=null,moved=false;
+ function move(ev){if(ev.pointerId!==e.pointerId)return;const dx=ev.clientX-startX,dy=ev.clientY-startY;
+   if(!moved&&Math.hypot(dx,dy)>12){moved=true;chosen=id;ghost=target.cloneNode(true);ghost.classList.add('ghost');ghost.classList.remove('is-selected');document.body.appendChild(ghost);}
+   if(ghost){ghost.style.left=(ev.clientX-115)+'px';ghost.style.top=(ev.clientY-55)+'px';}}
+ function end(ev){if(ev.pointerId!==e.pointerId)return;window.removeEventListener('pointermove',move);window.removeEventListener('pointerup',end);window.removeEventListener('pointercancel',end);
+   if(ghost){ghost.remove();const hit=document.elementFromPoint(ev.clientX,ev.clientY);const bin=hit&&hit.closest('.target');if(bin){attempt(bin.dataset.bin,id)}else{select(id)}}
+   else {select(id)} }
+ window.addEventListener('pointermove',move);window.addEventListener('pointerup',end);window.addEventListener('pointercancel',end);
+}
+$('reset').addEventListener('click',render);
+$('next').addEventListener('click',()=>{round=(round+1)%rounds.length;render()});
+$('full').addEventListener('click',()=>{if(!document.fullscreenElement){document.documentElement.requestFullscreen?.().catch(()=>{})}else document.exitFullscreen?.().catch(()=>{})});
+render();
+})();
+</script>
+</body></html>
