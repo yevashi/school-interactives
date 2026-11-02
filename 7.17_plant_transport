@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Транспорт веществ у растений — 7 класс</title>
+<style>
+:root{--navy:#173351;--green:#237a64;--aqua:#1586c8;--purple:#9a4fc7;--bg:#f2f7fb;--paper:#fff;--muted:#5c6f80;--border:#d9e5ee}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--navy);font:17px Arial,Helvetica,sans-serif}
+header{background:#133451;color:#fff;padding:18px 26px}header h1{margin:0 0 6px;font-size:27px}header p{margin:0;color:#d1e3ef}
+main{max-width:1310px;margin:20px auto;padding:0 18px;display:grid;grid-template-columns:420px 1fr;gap:18px}
+.panel{background:var(--paper);border:1px solid var(--border);border-radius:17px;padding:22px;box-shadow:0 5px 16px #1733510d}
+.plant{width:100%;height:440px;display:block}.legend{display:flex;flex-wrap:wrap;gap:11px;font-size:14px}.legend span{display:flex;align-items:center;gap:5px}.circle{display:inline-block;width:12px;height:12px;border-radius:100%}
+h2{font-size:22px;margin:0 0 8px}.sub{color:var(--muted);margin:0 0 16px;font-size:16px}.tabs{display:flex;gap:7px;flex-wrap:wrap;margin:0 0 18px}
+.tab{background:#e9f1f7;color:var(--navy);border:2px solid transparent}.tab.active{background:#d3e9ff;border-color:#1586c8}
+button{cursor:pointer;border:0;border-radius:11px;background:var(--green);color:white;padding:12px 15px;font:700 16px Arial}
+button:focus-visible{outline:3px solid orange;outline-offset:3px}button:hover{filter:brightness(.97)}
+.row{display:flex;gap:12px;flex-wrap:wrap}.chips{display:flex;flex-wrap:wrap;gap:9px;min-height:60px;margin:10px 0 19px}
+.chip{background:#f0f8ff;color:#134b74;border:2px solid #6ca9d5;border-radius:12px;font-size:19px;padding:11px 17px;touch-action:manipulation}
+.chip.selected{background:#ffd773;color:#452e07;border-color:#dd9800}.chip.used{opacity:.4}
+.zones{display:grid;gap:10px}.zone{background:#f8fbfe;border:2px dashed #9bb8c9;border-radius:13px;min-height:73px;display:flex;align-items:center;justify-content:space-between;gap:10px;text-align:left;padding:11px 15px;color:var(--navy);font:16px Arial;cursor:pointer}
+.zone.filled{background:#ecfaf3;border-style:solid;border-color:#45a286}.zone .picked{color:#15674f;font-weight:800;font-size:18px}
+.notice{margin:16px 0;min-height:55px;border-radius:12px;background:#eff5fb;padding:13px 15px;font-size:16px;line-height:1.4}
+.notice.success{background:#e8f8ee;color:#17663d}.notice.error{background:#fff1ec;color:#a03b2a}
+.actions{display:flex;flex-wrap:wrap;gap:9px}.actions .reset{background:#eef3f7;color:#1b4d65}
+.question{border:1px solid var(--border);padding:14px;border-radius:12px;margin:10px 0;background:#fafcff}
+.question strong{font-weight:600}.answers{display:flex;gap:12px;margin-top:12px}.answers button{background:#e8f0fa;color:#18405c}.answers button.active{background:#216aa8;color:white}
+.caption{font-size:13px;line-height:1.4;color:var(--muted);margin-top:12px}.footer{max-width:1310px;margin:0 auto 20px;padding:0 24px;color:#627787;font-size:13px}
+@media (max-width:850px){main{grid-template-columns:1fr}.plant{max-height:300px}header h1{font-size:22px}}
+</style></head><body>
+<header><h1>Транспорт веществ у растений</h1><p>Биология · 7 класс · Работа у интерактивной доски</p></header>
+<main>
+<section class="panel"><h2>Схема растения</h2>
+<svg class="plant" viewBox="0 0 410 460" role="img" aria-label="Схема растения с корнями, стеблем, листьями и плодом">
+<rect x="0" y="305" width="410" height="155" rx="12" fill="#f4ead8"/><path d="M0 310 H410" stroke="#bfa989" stroke-width="4"/>
+<path d="M205 309 Q204 252 204 80" stroke="#368a54" stroke-width="19" fill="none" stroke-linecap="round"/>
+<path d="M203 148 Q155 123 93 113 M204 195 Q253 166 308 129 M205 244 Q144 216 93 205" stroke="#438e5c" stroke-width="9" fill="none" stroke-linecap="round"/>
+<ellipse cx="96" cy="101" rx="58" ry="23" transform="rotate(21 96 101)" fill="#69b778" stroke="#388d52" stroke-width="2"/>
+<ellipse cx="310" cy="121" rx="62" ry="24" transform="rotate(-24 310 121)" fill="#77c884" stroke="#388d52" stroke-width="2"/>
+<ellipse cx="89" cy="200" rx="57" ry="23" transform="rotate(19 89 200)" fill="#6abf7a" stroke="#388d52" stroke-width="2"/>
+<ellipse cx="204" cy="70" rx="50" ry="24" fill="#63bb74" stroke="#388d52" stroke-width="2"/>
+<path d="M204 308 Q192 345 164 385 M204 308 Q212 352 259 390 M204 310 L204 431 M199 347 L144 361 M208 361 L277 368" fill="none" stroke="#a37b50" stroke-linecap="round" stroke-width="8"/>
+<path d="M204 170 Q262 158 283 194" fill="none" stroke="#378b53" stroke-width="5"/><circle cx="287" cy="206" r="22" fill="#ec9c40" stroke="#bf652b" stroke-width="3"/>
+<text x="31" y="49" fill="#276340" font-size="19" font-weight="700">Листья</text><text x="225" y="272" fill="#286342" font-size="19" font-weight="700">Стебель</text><text x="272" y="425" fill="#755735" font-size="19" font-weight="700">Корни</text><text x="306" y="244" fill="#945223" font-size="18" font-weight="700">Плод</text>
+<g id="arrowsWater" stroke="#1889c5" stroke-width="6" fill="none" stroke-linecap="round"><path d="M180 358 L180 278 L180 192 L177 116"/><path d="M165 135 L177 112 L189 135"/></g>
+<g id="arrowsFood" stroke="#a04bc2" stroke-width="6" fill="none" stroke-linecap="round" style="display:none"><path d="M142 115 Q211 120 242 166 Q267 183 272 198"/><path d="M257 190 L273 201 L276 184"/></g>
+</svg>
+<div class="legend"><span><i class="circle" style="background:#168ac5"></i>Вода и минеральные вещества</span><span><i class="circle" style="background:#9a4fc7"></i>Органические вещества</span></div>
+<p class="caption">Стрелки показывают упрощённые маршруты, а не строение проводящих тканей. Органические вещества могут поступать и в другие органы, включая корни.</p>
+</section>
+<section class="panel">
+<div class="tabs"><button class="tab active" data-round="0">1. Функции</button><button class="tab" data-round="1">2. Вода</button><button class="tab" data-round="2">3. Органические вещества</button><button class="tab" data-round="3">4. Верно/неверно</button></div>
+<h2 id="heading">Органы и функции</h2><p class="sub" id="instruction">Выбери карточку, затем нажми на подходящую ячейку.</p>
+<div id="board"></div>
+<div class="notice" id="notice" role="status">Можно перетаскивать карточки мышью или пальцем. Если это неудобно, нажми карточку и затем место для ответа.</div>
+<div class="actions"><button id="check">Проверить</button><button id="next">Следующий раунд →</button><button class="reset" id="reset">Очистить</button></div>
+</section>
+</main><p class="footer">Интерактив работает без интернета и внешних библиотек. Используйте F11 для полноэкранного режима.</p>
+<script>
+const rounds=[
+ {title:'Органы и функции',instruction:'Перенеси название органа к его основной функции.',items:[['root','Корень'],['stem','Стебель'],['leaf','Лист']],zones:[['root','Поглощает воду и минеральные вещества из почвы'],['stem','Проводит вещества между органами'],['leaf','Образует органические вещества при фотосинтезе']]},
+ {title:'Путь воды и минеральных веществ',instruction:'Заполни маршрут по порядку: от поступления из почвы до листа.',items:[['leaf','Лист'],['stem','Стебель'],['root','Корень']],zones:[['root','Шаг 1 — поступление из почвы'],['stem','Шаг 2 — перемещение вверх'],['leaf','Шаг 3 — получение воды']]},
+ {title:'Путь органических веществ к плоду',instruction:'Покажи один из маршрутов органических веществ, образовавшихся в листе.',items:[['fruit','Плод'],['leaf','Лист'],['stem','Стебель']],zones:[['leaf','Шаг 1 — где образовались'],['stem','Шаг 2 — путь переноса'],['fruit','Шаг 3 — куда поступили']]},
+ {title:'Верно или неверно?',instruction:'Выбери ответ в каждой строке и объясни одно решение.',questions:[['Корень поглощает воду и минеральные вещества.',true],['Органические вещества образуются только в корнях.',false],['Стебель участвует в транспорте веществ.',true],['Органические вещества могут поступать к корням и плодам.',true]]}
+];
+let round=0,selected=null,placed={},answers={};
+const $=id=>document.getElementById(id);
+function showMessage(t,kind=''){$('notice').className='notice '+kind;$('notice').textContent=t;}
+function chipButtons(){return rounds[round].items.map(([id,label])=>`<button type="button" class="chip ${selected===id?'selected':''} ${Object.values(placed).includes(id)?'used':''}" draggable="true" data-card="${id}" aria-label="${label}">${label}</button>`).join('');}
+function render(){const data=rounds[round];$('heading').textContent=data.title;$('instruction').textContent=data.instruction;document.querySelectorAll('.tab').forEach(b=>b.classList.toggle('active',+b.dataset.round===round));$('arrowsWater').style.display=round===1?'':'none';$('arrowsFood').style.display=round===2?'':'none';
+ if(round!==3){$('board').innerHTML=`<div class="chips">${chipButtons()}</div><div class="zones">${data.zones.map(([id,label],i)=>`<button type="button" class="zone ${placed[i]?'filled':''}" data-zone="${i}"><span>${label}</span><span class="picked">${placed[i]?data.items.find(e=>e[0]===placed[i])[1]:'Выбери →'}</span></button>`).join('')}</div>`;
+  $('board').querySelectorAll('[data-card]').forEach(b=>{b.addEventListener('click',()=>{selected=b.dataset.card;render();showMessage('Теперь выбери ячейку для карточки.');});b.addEventListener('dragstart',e=>{selected=b.dataset.card;e.dataTransfer.setData('text/plain',selected);});});
+  $('board').querySelectorAll('[data-zone]').forEach(b=>{b.addEventListener('click',()=>assign(+b.dataset.zone));b.addEventListener('dragover',e=>{e.preventDefault()});b.addEventListener('drop',e=>{e.preventDefault();selected=e.dataTransfer.getData('text/plain')||selected;assign(+b.dataset.zone)});});
+ }else{$('board').innerHTML=data.questions.map(([s],i)=>`<div class="question"><strong>${i+1}. ${s}</strong><div class="answers"><button type="button" class="${answers[i]===true?'active':''}" data-answer="${i}:1">Верно</button><button type="button" class="${answers[i]===false?'active':''}" data-answer="${i}:0">Неверно</button></div></div>`).join('');$('board').querySelectorAll('[data-answer]').forEach(b=>b.addEventListener('click',()=>{let [i,val]=b.dataset.answer.split(':');answers[+i]=val==='1';render()}));}
+}
+function assign(i){if(!selected){if(placed[i]){delete placed[i];render();showMessage('Карточка убрана. Выбери новую.')}else showMessage('Сначала выбери карточку.');return;}for(const key of Object.keys(placed)){if(placed[key]===selected)delete placed[key]}placed[i]=selected;selected=null;render();showMessage('Ответ установлен. После заполнения нажми «Проверить».');}
+function check(){const data=rounds[round];if(round===3){if(Object.keys(answers).length!==data.questions.length)return showMessage('Ответь на все утверждения.','error');const wrong=data.questions.map(([_,correct],i)=>answers[i]===correct?null:i+1).filter(Boolean);return showMessage(wrong.length?'Проверь утверждения № '+wrong.join(', ')+'. Объясни почему.':'Все верно! Вода поступает из корней, а органические вещества образуются в листьях и перемещаются к другим органам.',wrong.length?'error':'success');}
+ if(Object.keys(placed).length!==data.zones.length)return showMessage('Заполни все ячейки.','error');const wrong=data.zones.map(([id],i)=>placed[i]===id?null:i+1).filter(Boolean);showMessage(wrong.length?'Проверь ячейки № '+wrong.join(', ')+'. Подумай о направлении движения веществ.': round===0?'Верно! Корень поглощает воду и соли, стебель переносит, зелёные листья образуют органические вещества.':round===1?'Верно! Вода и минеральные вещества: корень → стебель → лист.':'Верно! Один из маршрутов органических веществ: лист → стебель → плод.',wrong.length?'error':'success');}
+function changeRound(i){round=i;placed={};answers={};selected=null;render();showMessage('Выбери карточку, затем нажми ячейку. Можно использовать перетаскивание.');}
+document.querySelectorAll('[data-round]').forEach(b=>b.addEventListener('click',()=>changeRound(+b.dataset.round)));
+$('check').addEventListener('click',check);$('reset').addEventListener('click',()=>changeRound(round));$('next').addEventListener('click',()=>changeRound((round+1)%rounds.length));changeRound(0);
+</script></body></html>
