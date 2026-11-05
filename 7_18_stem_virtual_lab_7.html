@@ -1,0 +1,148 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Виртуальная лаборатория — внутреннее строение стебля | 7 класс</title>
+<style>
+:root{--ink:#1d3448;--muted:#5b7182;--blue:#13567c;--pale:#ecf4f8;--line:#d1e0e9;--green:#247756;--white:#fff;--accent:#f3bc51}
+*{box-sizing:border-box}body{font-family:Arial,'Segoe UI',sans-serif;background:#edf3f6;color:var(--ink);margin:0;font-size:17px}header{background:linear-gradient(110deg,#103a56,#236f79);color:white;padding:18px 24px}header .bar{max-width:1240px;margin:auto;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap}header h1{font-size:27px;margin:0 0 6px}header p{margin:0;color:#dcebf2}header .tag{font-size:13px;border:1px solid #9fd0d4;padding:8px 12px;border-radius:9px}.wrap{max-width:1240px;margin:18px auto;padding:0 14px 26px}.notice{background:#fff8e9;color:#6f501c;border-left:5px solid #edbc60;border-radius:9px;padding:11px 16px;margin-bottom:14px;font-size:14px}nav{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}nav button{background:#fff;border:1px solid #c9d9e2;color:#26516b;border-radius:10px;cursor:pointer;padding:11px 13px;font-size:15px;font-weight:bold}nav button.active{background:var(--blue);border-color:var(--blue);color:white}nav button .mini{font-weight:normal;font-size:12px;display:block;opacity:.8}.layout{display:grid;grid-template-columns:minmax(340px,46%) 1fr;gap:15px}.panel{background:#fff;border:1px solid #d8e5eb;border-radius:15px;box-shadow:0 3px 12px #1b4b6510;padding:19px;min-width:0}.panel h2{font-size:21px;margin:0 0 9px;color:#153e5b}.panel h3{font-size:17px;margin:10px 0}.lead{color:var(--muted);font-size:15px;line-height:1.45;margin:8px 0 14px}.sketch{width:100%;max-height:450px;background:#f9fcfe;border-radius:14px;border:1px solid #e5eef4;display:block;touch-action:manipulation}.zone{cursor:pointer}.zone:hover{filter:drop-shadow(0 0 4px #187aac)}.legend{display:flex;flex-wrap:wrap;gap:7px;margin:12px 0}.legend>span{display:flex;gap:7px;align-items:center;font-size:13px;padding:6px 8px;border-radius:100px;background:#eef4f8}.swatch{width:13px;height:13px;border-radius:50%;display:inline-block;border:1px solid #52616c40}.result{background:#eef7f4;border:1px solid #c7e5dc;padding:13px;border-radius:10px;line-height:1.55;min-height:70px}.notebook{border:2px dashed #b1d2e2;border-radius:12px;padding:13px 15px;background:#f1f8fc;margin-top:15px;font-size:15px}.notebook strong{color:#075a88}.notebook p{margin:6px 0}.controls{display:flex;gap:9px;flex-wrap:wrap;margin:12px 0}.btn{border:0;border-radius:9px;background:#17699a;color:white;padding:11px 15px;font-size:16px;font-weight:600;cursor:pointer}.btn:hover{background:#09517d}.btn.ghost{background:#ebf2f6;color:#14425e}.btn:focus-visible,nav button:focus-visible,.opt:focus-visible{outline:3px solid #f0b545;outline-offset:2px}.opt{display:block;width:100%;text-align:left;padding:12px 15px;border-radius:10px;border:1px solid #c7dae5;background:#f7fbfd;color:#21384c;margin:8px 0;font-size:17px;cursor:pointer}.opt:hover{border-color:#4891b7;background:#e9f5fa}.opt.selected{background:#d9edf9;border:2px solid #2476a6;padding:11px 14px}.opt.good{background:#daf2e3;border-color:#358461}.opt.bad{background:#fff0ec;border-color:#c65f50}.feedback{font-size:15px;margin-top:12px;line-height:1.55;min-height:25px}.correct{color:#236c49}.wrong{color:#ac4233}.stat{font-weight:bold;color:#12617c;font-size:14px}.two{display:grid;grid-template-columns:1fr 1fr;gap:10px}.match{font-size:15px;min-height:65px;padding:12px 10px;border-radius:9px;background:#f2f6f8;border:2px solid #d3e3e8;color:#1e4157;cursor:pointer;text-align:left;display:flex;align-items:center}.match.selected{border-color:#0f7298;background:#e4f5fc}.match.done{border-color:#479577;background:#e4f3eb;color:#236043;cursor:default}.match:disabled{opacity:0.8}.flow{background:#e9f4f7;border:1px solid #bfd7e2;padding:12px;border-radius:10px;line-height:1.8;margin:11px 0;font-size:16px}.choicechips{display:flex;gap:9px;flex-wrap:wrap;margin:10px 0}.choicechips button{background:#eaf1f5;border:1px solid #bad3e0;border-radius:9px;color:#19516c;padding:11px 14px;font-size:16px;cursor:pointer}.choicechips button:hover{background:#d4ebf6}.score{font-size:22px;font-weight:bold;color:#1d7859}.small{font-size:13px;color:#5b6e7b}.sticky{position:sticky;top:10px;align-self:start}.hide{display:none!important}footer{color:#607687;font-size:12px;text-align:center;padding:8px 12px 18px}.exercise{border-bottom:1px solid #dce5eb;padding:10px 0}.exercise p{font-size:16px;margin:7px 0}.key{display:none;background:#f4f9ed;border-left:4px solid #72aa63;padding:12px;border-radius:8px;margin-top:13px;line-height:1.6}.key.show{display:block}@media(max-width:860px){.layout{grid-template-columns:1fr}.sticky{position:static}header h1{font-size:23px}.panel{padding:15px}.sketch{max-height:370px}}@media print{nav,.controls,.notice,button{display:none!important}.layout{display:block}.panel{break-inside:avoid;box-shadow:none}.wrap{margin:0}}
+</style>
+</head>
+<body>
+<header><div class="bar"><div><h1>Внутреннее строение стебля</h1><p>Биология · 7 класс · Виртуальная лабораторная работа · 05.11.2026</p></div><div class="tag">Учебная схема · работа с тетрадью</div></div></header>
+<div class="wrap">
+ <div class="notice"><b>Важно:</b> сегодня мы исследуем <b>виртуальную модель древесного стебля</b>, а не настоящий микропрепарат. Модель упрощена: у травянистых растений внутреннее строение может быть иным.</div>
+ <nav id="tabs" aria-label="Этапы лабораторной работы">
+  <button class="active" data-tab="0">1. Рассмотри срез <span class="mini">4 минуты</span></button>
+  <button data-tab="1">2. Найди слой <span class="mini">4 минуты</span></button>
+  <button data-tab="2">3. Часть и функция <span class="mini">4 минуты</span></button>
+  <button data-tab="3">4. Пути веществ <span class="mini">3 минуты</span></button>
+  <button data-tab="4">5. Что произойдёт? <span class="mini">4 минуты</span></button>
+  <button data-tab="5">6. Самопроверка <span class="mini">8 минут</span></button>
+ </nav>
+ <div class="layout">
+  <aside class="panel sticky">
+   <h2>Поперечный срез стебля</h2>
+   <p class="lead">Нажимай на кольца от наружной части к центру. Подписывай слои в тетради.</p>
+   <svg class="sketch" id="cross" viewBox="0 0 540 480" role="img" aria-label="Упрощённый поперечный срез древесного стебля с пятью слоями">
+    <defs><radialGradient id="woodshade"><stop offset="0" stop-color="#f7e1a9"/><stop offset="1" stop-color="#d9b36f"/></radialGradient></defs>
+    <rect x="0" y="0" width="540" height="480" fill="#f9fcfe"/>
+    <circle cx="242" cy="237" r="188" fill="#865439" stroke="#6e412b" stroke-width="4"/>
+    <circle cx="242" cy="237" r="165" fill="#c58b5f" stroke="#805037" stroke-width="2"/>
+    <circle cx="242" cy="237" r="141" fill="#87b67a" stroke="#5b9462" stroke-width="2"/>
+    <circle cx="242" cy="237" r="130" fill="url(#woodshade)" stroke="#af824b" stroke-width="2"/>
+    <circle cx="242" cy="237" r="104" fill="none" stroke="#ba9258" stroke-width="2" stroke-dasharray="4 7"/>
+    <circle cx="242" cy="237" r="79" fill="none" stroke="#ba9258" stroke-width="2" stroke-dasharray="4 7"/>
+    <circle cx="242" cy="237" r="51" fill="none" stroke="#ba9258" stroke-width="2"/>
+    <circle cx="242" cy="237" r="42" fill="#f8eed2" stroke="#c59f61" stroke-width="2"/>
+    <circle id="highlight" cx="242" cy="237" r="185" fill="none" stroke="#09add5" stroke-width="5" style="pointer-events:none" opacity="0"/>
+    <circle class="zone" data-layer="0" cx="242" cy="237" r="178" fill="none" stroke="rgba(0,0,0,0.001)" stroke-width="22" aria-label="Наружная защитная часть коры"/>
+    <circle class="zone" data-layer="1" cx="242" cy="237" r="153" fill="none" stroke="rgba(0,0,0,0.001)" stroke-width="24" aria-label="Луб, флоэма"/>
+    <circle class="zone" data-layer="2" cx="242" cy="237" r="135" fill="none" stroke="rgba(0,0,0,0.001)" stroke-width="10" aria-label="Камбий"/>
+    <circle class="zone" data-layer="3" cx="242" cy="237" r="86" fill="none" stroke="rgba(0,0,0,0.001)" stroke-width="85" aria-label="Древесина, ксилема"/>
+    <circle class="zone" data-layer="4" cx="242" cy="237" r="42" fill="rgba(0,0,0,0.001)" aria-label="Сердцевина"/>
+    <g font-family="Arial" font-size="16" font-weight="bold" text-anchor="middle">
+      <circle cx="449" cy="68" r="20" fill="white" stroke="#6b4630" stroke-width="2"/><text x="449" y="74" fill="#543720">1</text><path d="M434 83 L395 120" fill="none" stroke="#765540" stroke-width="2"/>
+      <circle cx="459" cy="162" r="20" fill="white" stroke="#986744" stroke-width="2"/><text x="459" y="168" fill="#61452b">2</text><path d="M440 169 L392 180" fill="none" stroke="#946c42" stroke-width="2"/>
+      <circle cx="464" cy="252" r="20" fill="white" stroke="#5f9167" stroke-width="2"/><text x="464" y="258" fill="#355b39">3</text><path d="M444 252 L380 244" fill="none" stroke="#5a885e" stroke-width="2"/>
+      <circle cx="450" cy="354" r="20" fill="white" stroke="#ba8849" stroke-width="2"/><text x="450" y="360" fill="#6a4d2e">4</text><path d="M435 344 L341 306" fill="none" stroke="#aa8052" stroke-width="2"/>
+      <circle cx="242" cy="237" r="20" fill="white" opacity=".95"/><text x="242" y="243" fill="#6a4d2e">5</text>
+    </g>
+    <text x="242" y="460" text-anchor="middle" font-family="Arial" font-size="15" fill="#506d7d">Учебная модель древесного стебля (не фото)</text>
+   </svg>
+   <div class="legend"><span><i class="swatch" style="background:#865439"></i>Покров</span><span><i class="swatch" style="background:#c58b5f"></i>Луб</span><span><i class="swatch" style="background:#87b67a"></i>Камбий</span><span><i class="swatch" style="background:#dfbc80"></i>Древесина</span><span><i class="swatch" style="background:#f8eed2"></i>Сердцевина</span></div>
+   <div class="result" id="layerInfo" aria-live="polite"><b>Выбери слой на рисунке.</b> Если нужна подсказка, нажми на одно из цветных колец.</div>
+  </aside>
+  <main class="panel">
+   <section class="stage" id="stage0">
+    <h2>Этап 1. Наблюдение модели</h2>
+    <p class="lead">Внешнее кольцо — защитная часть коры. По мере продвижения к центру обнаруживаются другие ткани. Изучи модель и опиши, как расположены пять зон.</p>
+    <div class="notebook"><strong>Запиши в тетрадь (4 мин)</strong><p>1. Тема: «Внутреннее строение стебля».</p><p>2. Нарисуй схему поперечного среза в виде пяти зон.</p><p>3. Подпиши числа 1–5 от наружной части к центру.</p><p>4. Начни таблицу: «№ | Часть стебля | Основная функция» (5 строк).</p></div>
+    <h3>Вопросы для класса</h3><p>• Что расположено снаружи? • Где находятся проводящие ткани? • Какая часть находится в центре?</p>
+    <div class="controls"><button class="btn" data-goto="1">Продолжить →</button></div>
+   </section>
+   <section class="stage hide" id="stage1">
+    <h2>Этап 2. Определи часть стебля</h2>
+    <p class="lead">Выбери правильный ответ. После объяснения у доски перейдите к следующему вопросу.</p>
+    <p class="stat" id="idProgress"></p><h3 id="idQuestion"></h3><div id="idOptions"></div><div class="feedback" id="idFeedback" aria-live="polite"></div>
+    <div class="controls"><button class="btn" id="idNext">Следующий вопрос</button><button class="btn ghost" id="idReset">Начать заново</button></div>
+    <div class="notebook"><strong>Запиши в тетрадь</strong><p>Допиши названия всех пяти слоёв в таблицу. Под каждым названием оставь строку для функции.</p></div>
+   </section>
+   <section class="stage hide" id="stage2">
+    <h2>Этап 3. Соотнеси строение и функцию</h2>
+    <p class="lead">Нажми слева на название ткани, затем справа на её функцию. Все ученики сначала выбирают вариант в тетради.</p>
+    <div class="two"><div id="matchLeft"></div><div id="matchRight"></div></div><div class="feedback" id="matchFeedback" aria-live="polite"></div><p class="stat" id="matchProgress"></p>
+    <div class="controls"><button class="btn ghost" id="matchReset">Сбросить связи</button></div>
+    <div class="notebook"><strong>Запиши в тетрадь</strong><p>Заполни последний столбец таблицы «Основная функция» для всех пяти частей стебля. Одним предложением объясни, почему строение и функция связаны.</p></div>
+   </section>
+   <section class="stage hide" id="stage3">
+    <h2>Этап 4. Два пути транспорта веществ</h2>
+    <p class="lead">Собери два маршрута, последовательно нажимая на блоки в правильном порядке. Учитель просит объяснить направление движения.</p>
+    <div class="controls"><button class="btn" id="waterRoute">Вода и минералы</button><button class="btn ghost" id="foodRoute">Органические вещества</button></div>
+    <h3 id="routePrompt">Маршрут воды и растворённых минеральных веществ</h3><div class="flow" id="routeBuilt">Твой маршрут: —</div><div class="choicechips" id="routeChoices"></div><div class="feedback" id="routeFeedback" aria-live="polite"></div>
+    <div class="controls"><button class="btn" id="routeCheck">Проверить маршрут</button><button class="btn ghost" id="routeClear">Очистить</button></div>
+    <div class="notebook"><strong>Запиши две схемы в тетрадь</strong><p>А. Почва → корень → ______ стебля → листья.</p><p>Б. Листья → ______ стебля → корни / плоды (потребляющие органы).</p><p>Объясни: почему по этим путям перемещаются разные вещества?</p></div>
+   </section>
+   <section class="stage hide" id="stage4">
+    <h2>Этап 5. Виртуальные ситуации</h2><p class="lead">В настоящей лаборатории мы бы наблюдали последствия повреждений в опытах. Здесь мы <b>моделируем</b> ситуации и прогнозируем результат, а не повреждаем живые растения.</p>
+    <p class="stat" id="caseProgress"></p><h3 id="caseQuestion"></h3><div id="caseOptions"></div><div class="feedback" id="caseFeedback" aria-live="polite"></div>
+    <div class="controls"><button class="btn" id="caseNext">Следующая ситуация</button><button class="btn ghost" id="caseReset">Начать заново</button></div>
+    <div class="notebook"><strong>Запиши в тетрадь</strong><p>Выбери одну ситуацию, запиши прогноз и объяснение: «Если повреждена ______, то ______, потому что ______».</p></div>
+   </section>
+   <section class="stage hide" id="stage5">
+    <h2>Самостоятельное закрепление (8 минут)</h2>
+    <p class="lead">Сначала каждый отвечает в тетради. Учитель открывает ключ только после выполнения.</p>
+    <div class="exercise"><strong>1. Подпиши слои.</strong><p>Запиши по порядку от наружного кольца к центру все пять частей стебля.</p></div>
+    <div class="exercise"><strong>2. Заверши фразы.</strong><p>«Ксилема нужна для ______. Флоэма нужна для ______. Камбий нужен для ______».</p></div>
+    <div class="exercise"><strong>3. Назови ткань по функции.</strong><p>а) Перенос воды из корня к листьям. б) Перенос органических веществ. в) Образование новых проводящих тканей.</p></div>
+    <div class="exercise"><strong>4. Объясни ситуацию.</strong><p>Если у стебля повреждена древесина (ксилема), что может произойти с листьями? Объясни причину.</p></div>
+    <div class="exercise"><strong>Дополнительное задание.</strong><p>Почему удаление кольца коры с лубом не всегда сразу останавливает поступление воды к листьям, но опасно для корней?</p></div>
+    <div class="controls"><button class="btn" id="showKey">Показать / скрыть эталон проверки</button></div>
+    <div class="key" id="key"><b>Эталон:</b><br>1) Защитная часть коры → луб (флоэма) → камбий → древесина (ксилема) → сердцевина.<br>2) Ксилема проводит воду и минеральные вещества; флоэма переносит органические вещества; камбий обеспечивает утолщение.<br>3) а) ксилема; б) флоэма; в) камбий.<br>4) Может нарушиться поступление воды к листьям, что приводит к увяданию.<br><b>Дополнительно:</b> луб с флоэмой находится внутри коры; при кольцевом повреждении его проводящие функции нарушаются, тогда как ксилема может некоторое время оставаться целой.</div>
+    <div class="notebook"><strong>Итоговый вывод</strong><p>«Стебель имеет несколько разных тканей. Их строение связано с функциями: ______». Укажи три функции.</p></div>
+   </section>
+  </main>
+ </div>
+</div>
+<footer>Учебная модель для демонстрации и самостоятельной работы. Сохраните файл с расширением .html и опубликуйте через GitHub Pages.</footer>
+<script>
+const layers=[
+{name:'Защитная часть коры (покров)',text:'Самая наружная часть. Защищает стебель от повреждений и уменьшает потерю воды.',r:177,w:24},
+{name:'Луб (флоэма)',text:'Находится внутри коры. По флоэме перемещаются органические вещества от мест образования к органам-потребителям.',r:153,w:24},
+{name:'Камбий',text:'Узкий слой образовательной ткани между лубом и древесиной. Обеспечивает рост стебля в толщину, образуя новые ткани.',r:135,w:11},
+{name:'Древесина (ксилема)',text:'Большая внутренняя область. По ксилеме преимущественно вверх перемещается вода с растворёнными минеральными веществами.',r:85,w:83},
+{name:'Сердцевина',text:'Находится в центре. Паренхимные клетки сердцевины могут запасать вещества.',r:42,w:6}];
+let curTab=0;
+function layerShow(i){const layer=layers[i];const h=document.getElementById('highlight');h.setAttribute('r',layer.r);h.setAttribute('stroke-width',layer.w);h.setAttribute('opacity','1');document.getElementById('layerInfo').innerHTML=`<b>${i+1}. ${layer.name}</b><div>${layer.text}</div>`;}
+document.querySelectorAll('.zone').forEach(el=>{el.addEventListener('click',()=>layerShow(Number(el.dataset.layer)));el.setAttribute('tabindex','0');el.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();layerShow(Number(el.dataset.layer));}})});
+function showTab(n){curTab=n;document.querySelectorAll('.stage').forEach((el,i)=>el.classList.toggle('hide',i!==n));document.querySelectorAll('#tabs button').forEach((el,i)=>{el.classList.toggle('active',i===n);el.setAttribute('aria-current',i===n?'step':'false')});window.scrollTo({top:0,behavior:'smooth'});}
+document.querySelectorAll('#tabs button').forEach(el=>el.addEventListener('click',()=>showTab(Number(el.dataset.tab))));document.querySelectorAll('[data-goto]').forEach(el=>el.addEventListener('click',()=>showTab(Number(el.dataset.goto))));
+const identify=[
+ {q:'Как называется часть №1 — самое наружное защитное кольцо?',a:0,opts:['Защитная часть коры','Камбий','Сердцевина'],reason:'Покровная часть коры снаружи защищает стебель.'},
+ {q:'Где находится луб — ткань, по которой перемещаются органические вещества?',a:1,opts:['В сердцевине (№5)','Во внутренней части коры (№2)','В древесине (№4)'],reason:'Луб содержит флоэму и лежит внутри коры.'},
+ {q:'Какой номер у камбия, расположенного между флоэмой и ксилемой?',a:2,opts:['№1','№5','№3'],reason:'Камбий — тонкий слой между лубом и древесиной.'},
+ {q:'Как называют область №4, связанную с проведением воды и минералов?',a:1,opts:['Сердцевина','Древесина (ксилема)','Покров'],reason:'В древесине расположены элементы ксилемы.'},
+ {q:'Что находится в центре стебля под номером №5?',a:2,opts:['Камбий','Луб','Сердцевина'],reason:'Сердцевина занимает центральную часть.'}];
+let idIndex=0,idCorrect=0,idAnswered=false;
+function renderId(){const x=identify[idIndex];document.getElementById('idProgress').textContent=`Вопрос ${idIndex+1} из ${identify.length} · верно: ${idCorrect}`;document.getElementById('idQuestion').textContent=x.q;const box=document.getElementById('idOptions');box.replaceChildren();x.opts.forEach((t,i)=>{const b=document.createElement('button');b.className='opt';b.textContent=t;b.addEventListener('click',()=>{if(idAnswered)return;idAnswered=true;b.classList.add(i===x.a?'good':'bad');const f=document.getElementById('idFeedback');f.className='feedback '+(i===x.a?'correct':'wrong');f.textContent=(i===x.a?'Верно! ':'Попробуй объяснить точнее. ')+x.reason;if(i===x.a)idCorrect++;document.getElementById('idProgress').textContent=`Вопрос ${idIndex+1} из ${identify.length} · верно: ${idCorrect}`;if(i===x.a)layerShow([0,1,2,3,4][idIndex]);});box.appendChild(b)});document.getElementById('idFeedback').textContent='';idAnswered=false;}
+document.getElementById('idNext').addEventListener('click',()=>{idIndex=(idIndex+1)%identify.length;renderId()});document.getElementById('idReset').addEventListener('click',()=>{idIndex=0;idCorrect=0;renderId()});
+const pairs=[['Покровная часть коры','Защита от внешних воздействий'],['Луб / флоэма','Перенос органических веществ'],['Камбий','Рост стебля в толщину'],['Древесина / ксилема','Проведение воды и минеральных веществ'],['Сердцевина','Запасание веществ']];
+const shuffle=[3,0,4,1,2];let picked=null,found=new Set();
+function renderMatch(){const left=document.getElementById('matchLeft'),right=document.getElementById('matchRight');left.replaceChildren();right.replaceChildren();picked=null;found=new Set();pairs.forEach((pair,i)=>{const b=document.createElement('button');b.className='match';b.textContent=`${i+1}. ${pair[0]}`;b.dataset.id=i;b.addEventListener('click',()=>pickMatch('left',i,b));left.appendChild(b)});shuffle.forEach(i=>{const b=document.createElement('button');b.className='match';b.textContent=pairs[i][1];b.dataset.id=i;b.addEventListener('click',()=>pickMatch('right',i,b));right.appendChild(b)});document.getElementById('matchFeedback').textContent='';document.getElementById('matchProgress').textContent='Найдено пар: 0 / 5';}
+function pickMatch(side,i,b){if(found.has(i))return;if(side==='left'){document.querySelectorAll('#matchLeft .match').forEach(el=>el.classList.remove('selected'));picked=i;b.classList.add('selected');document.getElementById('matchFeedback').textContent='Теперь выбери функцию справа.';return}if(picked===null){document.getElementById('matchFeedback').textContent='Сначала выбери часть стебля слева.';return}const f=document.getElementById('matchFeedback');if(i===picked){found.add(i);document.querySelectorAll(`.match[data-id="${i}"]`).forEach(el=>{el.classList.add('done');el.classList.remove('selected');el.disabled=true});f.className='feedback correct';f.textContent='Верно. Объясни, почему эта ткань выполняет такую функцию.';picked=null}else{f.className='feedback wrong';f.textContent='Пока не совпало. Подумай, по какой ткани движется вода, а по какой — органические вещества.'}document.getElementById('matchProgress').textContent=`Найдено пар: ${found.size} / 5${found.size===5?' · все соответствия верны!':''}`;}
+document.getElementById('matchReset').addEventListener('click',renderMatch);
+const routes=[{label:'Маршрут воды и минеральных веществ',nodes:['Корень','Ксилема стебля','Листья']},{label:'Маршрут органических веществ',nodes:['Листья','Флоэма стебля','Корни или плоды']}];let routeIndex=0,built=[];const routePool=['Листья','Ксилема стебля','Корни или плоды','Флоэма стебля','Корень'];
+function renderRoute(){built=[];document.getElementById('routePrompt').textContent=routes[routeIndex].label;document.getElementById('routeFeedback').textContent='';updateBuilt();document.getElementById('waterRoute').className='btn '+(routeIndex===0?'':'ghost');document.getElementById('foodRoute').className='btn '+(routeIndex===1?'':'ghost');}
+function updateBuilt(){document.getElementById('routeBuilt').textContent='Твой маршрут: '+(built.join(' → ')||'—');const el=document.getElementById('routeChoices');el.replaceChildren();routePool.filter(x=>!built.includes(x)).forEach(name=>{const b=document.createElement('button');b.textContent=name;b.addEventListener('click',()=>{if(built.length<3){built.push(name);updateBuilt();document.getElementById('routeFeedback').textContent=''}});el.appendChild(b)});}
+document.getElementById('waterRoute').addEventListener('click',()=>{routeIndex=0;renderRoute()});document.getElementById('foodRoute').addEventListener('click',()=>{routeIndex=1;renderRoute()});document.getElementById('routeClear').addEventListener('click',renderRoute);document.getElementById('routeCheck').addEventListener('click',()=>{const ok=JSON.stringify(built)===JSON.stringify(routes[routeIndex].nodes);const f=document.getElementById('routeFeedback');f.className='feedback '+(ok?'correct':'wrong');f.textContent=ok?'Верный маршрут! Объясни, какую работу выполняет проводящая ткань.':'Маршрут пока неверен. Начни с органа-источника и выбери соответствующую проводящую ткань.'});
+const cases=[
+{q:'Повреждена ксилема стебля. Какое последствие наиболее вероятно?',opts:['Нарушится поступление воды к листьям','Усилится образование новых слоёв камбия','Корни начнут производить больше сахара'],a:0,why:'Ксилема проводит воду и минеральные вещества. При её повреждении листья могут испытывать недостаток воды.'},
+{q:'Удалено кольцо коры вместе с лубом, но древесина сохранилась. Что нарушится прежде всего?',opts:['Поступление света к листьям','Перенос органических веществ к корням','Образование кислорода в воздухе'],a:1,why:'Флоэма проводит продукты фотосинтеза к органам-потребителям. Ксилема некоторое время может сохранять путь воды.'},
+{q:'Повреждён камбий. Какая функция особенно пострадает?',opts:['Поглощение света листом','Запас воды в сердцевине','Образование новых тканей и рост стебля в толщину'],a:2,why:'Камбий — образовательная ткань, дающая новые слои проводящих тканей.'}];let caseIndex=0,caseCorrect=0,caseAnswered=false;
+function renderCase(){const x=cases[caseIndex];document.getElementById('caseProgress').textContent=`Ситуация ${caseIndex+1} из ${cases.length} · правильно: ${caseCorrect}`;document.getElementById('caseQuestion').textContent=x.q;const box=document.getElementById('caseOptions');box.replaceChildren();x.opts.forEach((t,i)=>{const b=document.createElement('button');b.textContent=t;b.className='opt';b.addEventListener('click',()=>{if(caseAnswered)return;caseAnswered=true;const ok=i===x.a;b.classList.add(ok?'good':'bad');if(ok)caseCorrect++;const f=document.getElementById('caseFeedback');f.className='feedback '+(ok?'correct':'wrong');f.textContent=(ok?'Верный прогноз. ':'Нужно уточнить. ')+x.why;document.getElementById('caseProgress').textContent=`Ситуация ${caseIndex+1} из ${cases.length} · правильно: ${caseCorrect}`});box.appendChild(b)});document.getElementById('caseFeedback').textContent='';caseAnswered=false;}
+document.getElementById('caseNext').addEventListener('click',()=>{caseIndex=(caseIndex+1)%cases.length;renderCase()});document.getElementById('caseReset').addEventListener('click',()=>{caseIndex=0;caseCorrect=0;renderCase()});document.getElementById('showKey').addEventListener('click',()=>document.getElementById('key').classList.toggle('show'));
+renderId();renderMatch();renderRoute();renderCase();
+</script>
+</body>
+</html>
