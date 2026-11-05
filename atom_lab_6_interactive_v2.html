@@ -1,0 +1,371 @@
+
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Строение атома — 6 класс</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#091626;color:#f4f9ff;font:19px/1.4 Arial,sans-serif}
+button,input,select{font:inherit}
+button{cursor:pointer;touch-action:manipulation;border:1px solid #6389a4;border-radius:12px;background:#275575;color:white;padding:12px 17px;min-height:55px;font-weight:bold}
+button:hover{background:#337499}
+button:focus-visible{outline:3px solid #ffe086}
+h1{font-size:32px;margin:0}
+h2{font-size:23px;margin:0 0 13px}
+.wrap{max-width:1900px;margin:auto;padding:16px}
+.head{display:flex;align-items:center;justify-content:space-between;gap:15px;flex-wrap:wrap;margin-bottom:12px}
+.nav{display:flex;flex-wrap:wrap;gap:9px}
+.nav button{background:#23435e}
+.nav button.active{background:#1382a6}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:15px}
+.panel{background:#142b43;border:1px solid #42627e;border-radius:17px;padding:19px}
+.task{background:#0e2034;border:1px solid #547c98;border-radius:13px;padding:17px;font-size:26px;font-weight:bold;min-height:140px;margin-bottom:13px}
+.muted{font-size:17px;color:#bed5e7;font-weight:normal}
+.row{display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin:12px 0}
+.row button{background:#1988a8}
+.answer{min-height:65px;padding:13px;border-radius:12px;border:1px solid #52718a;background:#1e3b53;font-size:20px}
+.answer.ok{background:#18543b;color:#ddffe8}
+.answer.bad{background:#66353a;color:#fff}
+.diagram{height:365px;background:radial-gradient(ellipse,#1a3d5a,#061423);border:1px solid #416483;border-radius:15px}
+.diagram svg{height:100%;width:100%}
+.values{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.value{background:#1c3853;border-radius:12px;padding:12px;text-align:center}
+.value b{font-size:21px}
+.step{display:flex;justify-content:center;align-items:center;gap:6px;margin-top:9px}
+.step button{padding:3px;width:58px;height:62px;font-size:30px}
+.step span{min-width:42px;font-size:30px;font-weight:bold}
+.badge{display:inline-block;padding:8px 13px;background:#224a65;border-radius:25px;margin:10px 5px 0 0;font-size:17px}
+.sub{font-size:16px;color:#b8d2e7}
+.hidden{display:none}
+.modal{position:fixed;inset:0;background:#061321f5;z-index:5;padding:17px;overflow:auto}
+.modalinner{max-width:1780px;margin:auto}
+.table{display:grid;grid-template-columns:repeat(18,minmax(0,1fr));gap:5px}
+.cell{grid-column:var(--c);grid-row:var(--r);min-height:98px;border:2px solid #648ba2;background:#21516a;display:flex;align-items:center;justify-content:center;flex-direction:column;padding:2px;border-radius:9px;line-height:1.1}
+.cell small{font-size:17px}
+.cell strong{font-size:35px}
+.cell em{font-size:13px;font-style:normal}
+.selected{border-color:#ffdb78;background:#486076}
+.quizopts{display:grid;grid-template-columns:1fr 1fr;gap:11px}
+.quizopts button{text-align:left;min-height:90px;font-size:23px}
+.topline{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+.summary{font-size:21px;font-weight:bold}
+.summary span{color:#92e1ee}
+.hint{padding:12px;background:#213d55;border-radius:10px;margin:8px 0}
+.tip{font-size:16px;color:#b6cde0}
+.tools{display:flex;flex-wrap:wrap;gap:10px}
+@media(max-width:1000px){
+.grid{grid-template-columns:1fr}
+.table{grid-template-columns:repeat(10,1fr)}
+.cell{grid-column:auto;grid-row:auto;min-height:72px}
+.cell strong{font-size:25px}
+.cell em{font-size:11px}
+.diagram{height:330px}
+}
+@media(max-width:500px){
+body{font-size:16px}
+.values{grid-template-columns:1fr}
+.task{font-size:21px}
+.quizopts{grid-template-columns:1fr}
+.cell{min-height:60px}
+.cell em{display:none}
+}
+</style>
+</head>
+<body>
+<main class="wrap">
+<div class="head">
+  <div>
+    <div class="sub">ЕСТЕСТВОЗНАНИЕ · 6 КЛАСС · 6.3.1.2</div>
+    <h1>Строение атома: собери и объясни</h1>
+  </div>
+  <div class="nav">
+    <button id="build" class="active">Собери атом</button>
+    <button id="repair">Исправь ошибку</button>
+    <button id="quiz">Проверка знаний</button>
+    <button id="tablebtn">Таблица Менделеева</button>
+    <button id="full">⛶</button>
+  </div>
+</div>
+<div class="grid">
+  <section class="panel">
+    <div id="work">
+      <div class="topline">
+        <h2 id="modeTitle">Собери атом</h2>
+        <span id="countLabel">Задание 1</span>
+      </div>
+      <div class="row">
+        <label>Сложность:
+          <select id="level">
+            <option value="a">1 — элементы 1–10</option>
+            <option value="b">2 — элементы 11–20</option>
+            <option value="c">3 — заряд атомной частицы</option>
+          </select>
+        </label>
+      </div>
+      <div class="task" id="task"></div>
+      <div class="row">
+        <button id="check">Проверить модель</button>
+        <button id="next">Следующее задание →</button>
+        <button id="hintBtn">Подсказка</button>
+      </div>
+      <div id="hint" class="hint hidden"></div>
+      <div class="answer" id="feedback">Найди элемент в таблице и собери модель справа.</div>
+      <div class="row">
+        <span id="score">Верных заданий: 0</span>
+      </div>
+    </div>
+    <div id="quizPanel" class="hidden">
+      <h2>Проверка знаний</h2>
+      <div class="task" id="question"></div>
+      <div class="quizopts" id="options"></div>
+      <div class="answer" id="quizFeedback">Выбери правильный ответ.</div>
+      <div class="row">
+        <button id="quizNext">Следующий вопрос →</button>
+        <span id="quizScore"></span>
+      </div>
+    </div>
+  </section>
+  <section class="panel">
+    <div class="topline">
+      <h2 id="elementTitle">Гелий · He</h2>
+      <span id="chargeTitle">Нейтральная модель</span>
+    </div>
+    <div class="diagram">
+      <svg viewBox="0 0 600 460" aria-label="Модель строения атома">
+        <g id="rings"></g>
+        <g id="nucleus"></g>
+        <g id="electrons"></g>
+      </svg>
+    </div>
+    <div class="row sub">
+      <span>🔴 Протоны (+)</span>
+      <span>⚪ Нейтроны (0)</span>
+      <span>🔵 Электроны (−)</span>
+    </div>
+    <div class="values">
+      <div class="value">
+        <b>Протоны</b>
+        <div class="step">
+          <button data-k="p" data-d="-1">−</button>
+          <span id="p">2</span>
+          <button data-k="p" data-d="1">+</button>
+        </div>
+      </div>
+      <div class="value">
+        <b>Нейтроны</b>
+        <div class="step">
+          <button data-k="n" data-d="-1">−</button>
+          <span id="n">2</span>
+          <button data-k="n" data-d="1">+</button>
+        </div>
+      </div>
+      <div class="value">
+        <b>Электроны</b>
+        <div class="step">
+          <button data-k="e" data-d="-1">−</button>
+          <span id="e">2</span>
+          <button data-k="e" data-d="1">+</button>
+        </div>
+      </div>
+    </div>
+    <div class="summary">
+      <span class="badge">Ядро: <span id="core">4</span></span>
+      <span class="badge">Заряд: <span id="charge">0</span></span>
+    </div>
+    <p class="tip">Схема условная: электроны не движутся по нарисованным круговым орбитам.</p>
+  </section>
+</div>
+</main>
+<section id="modal" class="modal hidden">
+  <div class="modalinner">
+    <div class="topline">
+      <h2>Периодическая система · первые 20 элементов</h2>
+      <button id="close">Вернуться к заданию ×</button>
+    </div>
+    <p>Порядковый номер элемента Z показывает число протонов. В нейтральном атоме электронов столько же.</p>
+    <div class="table" id="table"></div>
+    <div class="answer" id="info">Нажми на элемент, чтобы увидеть его порядковый номер.</div>
+  </div>
+</section>
+<script>
+const raw=[
+[1,'H','Водород',1,1],
+[2,'He','Гелий',1,18],
+[3,'Li','Литий',2,1],
+[4,'Be','Бериллий',2,2],
+[5,'B','Бор',2,13],
+[6,'C','Углерод',2,14],
+[7,'N','Азот',2,15],
+[8,'O','Кислород',2,16],
+[9,'F','Фтор',2,17],
+[10,'Ne','Неон',2,18],
+[11,'Na','Натрий',3,1],
+[12,'Mg','Магний',3,2],
+[13,'Al','Алюминий',3,13],
+[14,'Si','Кремний',3,14],
+[15,'P','Фосфор',3,15],
+[16,'S','Сера',3,16],
+[17,'Cl','Хлор',3,17],
+[18,'Ar','Аргон',3,18],
+[19,'K','Калий',4,1],
+[20,'Ca','Кальций',4,2]
+];
+const masses=[0,1,4,7,9,11,12,14,16,19,20,23,24,27,28,31,32,35,40,39,40];
+const $=x=>document.getElementById(x);
+let counts={p:2,n:2,e:2},mode='build',level='a',task=null,num=0,score=0,done=false,quizAt=0,quizScore=0,quizDone=false;
+const questions=[
+['Где находятся протоны?',['В ядре','В электронной оболочке','Между атомами','Вне атома'],0],
+['Какой заряд у нейтрона?',['+1','−1','0','+2'],2],
+['Сколько протонов в атоме кислорода?',['6','8','10','16'],1],
+['Что определяет химический элемент?',['Число электронов','Число протонов','Число нейтронов','Масса электронов'],1],
+['Сколько электронов в нейтральном атоме натрия?',['10','11','12','23'],1],
+['Как вычислить число нейтронов при известных Z и A?',['A + Z','Z − A','A − Z','A × Z'],2],
+['Каков заряд при 6 протонах и 5 электронах?',['0','−1','+1','+2'],2],
+['Что изменится, если удалить электрон?',['Элемент','Число протонов','Заряд частицы','Число нейтронов'],2]
+];
+function setMode(m){
+mode=m;
+for(let x of ['build','repair','quiz'])$(x).classList.toggle('active',m===x);
+$('work').classList.toggle('hidden',m==='quiz');
+$('quizPanel').classList.toggle('hidden',m!=='quiz');
+if(m==='quiz'){quizAt=0;quizScore=0;renderQuiz()}
+else{num=0;score=0;$('modeTitle').textContent=m==='build'?'Собери атом':'Исправь ошибку';newTask()}
+}
+function newTask(){
+num++;done=false;
+const pool=level==='a'?raw.slice(0,10):level==='b'?raw.slice(10):raw;
+let z=pool[Math.floor(Math.random()*pool.length)][0];
+let d=level==='c'?[-1,0,1][Math.floor(Math.random()*3)]:0;
+task={z,A:masses[z],d};
+let el=raw[z-1];
+$('countLabel').textContent='Задание '+num;
+let condition=`${el[2]} (${el[1]}). Массовое число A = ${task.A}. `+(d===0?'Атом нейтрален.':'Заряд модели: '+(d>0?'+':'')+d+'.');
+$('task').textContent=mode==='repair'?'Исправь ошибку в модели. '+condition:'Собери модель атома. '+condition;
+let expected=[z,task.A-z,z-d];
+if(mode==='repair'){
+counts={p:expected[0],n:expected[1],e:expected[2]};
+let key=['p','n','e'][Math.floor(Math.random()*3)];
+counts[key]=Math.max(0,counts[key]+(counts[key]===0?1:Math.random()<.5?-1:1))
+}else counts={p:2,n:2,e:2};
+$('hint').classList.add('hidden');
+$('feedback').className='answer';
+$('feedback').textContent='Найди Z в таблице Менделеева, вычисли частицы и проверь результат.';
+$('score').textContent='Верных заданий: '+score;draw()
+}
+function feedback(text,good){
+$('feedback').textContent=text;
+$('feedback').className='answer '+(good?'ok':'bad')
+}
+function check(){
+if(done)return;
+let ok=counts.p===task.z&&counts.n===task.A-task.z&&counts.e===task.z-task.d;
+if(ok){
+done=true;score++;
+feedback('Верно! Протонов: '+counts.p+', нейтронов: '+counts.n+', электронов: '+counts.e+'.',true);
+$('score').textContent='Верных заданий: '+score
+}else feedback('Проверь числа: протоны = Z; нейтроны = A − Z; электроны определяют заряд.',false)
+}
+function svg(tag,attrs,text){
+const x=document.createElementNS('http://www.w3.org/2000/svg',tag);
+for(let k in attrs)x.setAttribute(k,attrs[k]);
+if(text!==undefined)x.textContent=text;
+return x
+}
+function particle(g,x,y,fill,symbol,size=11){
+g.appendChild(svg('circle',{cx:x,cy:y,r:size,fill,stroke:'#fff','stroke-width':1.3}));
+if(symbol)g.appendChild(svg('text',{x,y:y+4,fill:'#08182a','font-size':13,'font-weight':900,'text-anchor':'middle'},symbol))
+}
+function draw(){
+for(let k in counts)$(k).textContent=counts[k];
+let charge=counts.p-counts.e;
+let el=raw[counts.p-1];
+$('elementTitle').textContent=el?el[2]+' · '+el[1]:'Модель вне таблицы';
+$('chargeTitle').textContent=charge===0?'Нейтральная модель':'Заряд '+(charge>0?'+':'')+charge;
+$('charge').textContent=(charge>0?'+':'')+charge;
+$('core').textContent=counts.p+counts.n;
+for(let k of ['rings','nucleus','electrons'])$(k).replaceChildren();
+let radii=[125,175,209,224],e=counts.e;
+let shells=[Math.min(2,e),Math.min(8,Math.max(0,e-2)),Math.min(8,Math.max(0,e-10)),Math.max(0,e-18)];
+shells.forEach((count,j)=>{
+if(j===0||count>0)$('rings').appendChild(svg('circle',{cx:300,cy:230,r:radii[j],fill:'none',stroke:'#4d7797','stroke-width':2,'stroke-dasharray':'7 7'}));
+for(let i=0;i<count;i++){
+let a=-Math.PI/2+2*Math.PI*i/count;
+particle($('electrons'),300+radii[j]*Math.cos(a),230+radii[j]*Math.sin(a),'#59d9f0','−',9)
+}
+});
+let total=counts.p+counts.n;
+for(let i=0;i<total;i++){
+let a=i*2.39996,r=total===1?0:Math.sqrt(i)*11.7;
+particle($('nucleus'),300+r*Math.cos(a),230+r*Math.sin(a),i<counts.p?'#ff7880':'#ebedf0',total<20?(i<counts.p?'+':'0'):'',total>25?8:11)
+}
+}
+function renderQuiz(){
+if(quizAt>=questions.length){
+$('question').textContent='Проверка завершена! Правильных ответов: '+quizScore+' из '+questions.length;
+$('options').replaceChildren();
+$('quizFeedback').textContent='Вы можете снова выбрать режим сборки атома.';
+$('quizScore').textContent='Итого: '+quizScore;
+$('quizNext').disabled=true;return
+}
+quizDone=false;
+let q=questions[quizAt];
+$('question').textContent=(quizAt+1)+'. '+q[0];
+$('options').replaceChildren();
+q[1].forEach((v,i)=>{
+let b=document.createElement('button');
+b.textContent=v;
+b.onclick=()=>{
+if(quizDone)return;
+quizDone=true;
+if(i===q[2])quizScore++;
+$('quizFeedback').textContent=i===q[2]?'Верно!':'Неверно. Правильный ответ: '+q[1][q[2]];
+b.style.background=i===q[2]?'#205d48':'#733947';
+$('quizScore').textContent='Правильных: '+quizScore+' / '+questions.length
+};
+$('options').appendChild(b)
+});
+$('quizFeedback').textContent='Выбери один вариант.';
+$('quizScore').textContent='Правильных: '+quizScore+' / '+questions.length;
+$('quizNext').disabled=false
+}
+raw.forEach(el=>{
+let b=document.createElement('button');
+b.className='cell';
+b.style.setProperty('--r',el[3]);
+b.style.setProperty('--c',el[4]);
+b.innerHTML='<small>'+el[0]+'</small><strong>'+el[1]+'</strong><em>'+el[2]+'</em>';
+b.onclick=()=>{
+$('info').textContent=el[2]+' ('+el[1]+'): Z = '+el[0]+', протонов = '+el[0]+'. В нейтральном атоме электронов тоже '+el[0]+'.';
+document.querySelectorAll('.cell').forEach(x=>x.classList.remove('selected'));
+b.classList.add('selected')
+};
+$('table').appendChild(b)
+});
+document.querySelectorAll('[data-k]').forEach(b=>b.onclick=()=>{
+let k=b.dataset.k;
+counts[k]=Math.max(0,Math.min(30,counts[k]+Number(b.dataset.d)));
+draw()
+});
+$('build').onclick=()=>setMode('build');
+$('repair').onclick=()=>setMode('repair');
+$('quiz').onclick=()=>setMode('quiz');
+$('check').onclick=check;
+$('next').onclick=newTask;
+$('level').onchange=e=>{level=e.target.value;num=0;score=0;newTask()};
+$('hintBtn').onclick=()=>{
+$('hint').classList.toggle('hidden');
+$('hint').textContent='Найди Z в таблице. Для нейтронов используй A − Z. В нейтральном атоме электронов столько же, сколько протонов.'
+};
+$('tablebtn').onclick=()=>$('modal').classList.remove('hidden');
+$('close').onclick=()=>$('modal').classList.add('hidden');
+$('quizNext').onclick=()=>{if(quizDone){quizAt++;renderQuiz()}};
+$('full').onclick=()=>{
+if(!document.fullscreenElement)document.documentElement.requestFullscreen?.();
+else document.exitFullscreen?.()
+};
+draw();newTask();
+</script>
+</body>
+</html>
