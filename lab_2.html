@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="ru"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Лабораторная работа «Исследование зон корня»</title>
+<style>
+:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);--bg:#f1f7ec;--card:#fff;--fg:#1d2b20;--mut:#566759;--accent:#2d8a4e;--soil:#eadfca;--line:#d3ddcd;--bad:#d64545;color-scheme:light}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#121913;--card:#1c2620;--fg:#eef5ee;--mut:#a5b5a8;--accent:#5fd388;--soil:#2a2920;--line:#33433a;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#121913;--card:#1c2620;--fg:#eef5ee;--mut:#a5b5a8;--accent:#5fd388;--soil:#2a2920;--line:#33433a;color-scheme:dark}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font:18px/1.45 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+header{padding:14px 20px 6px}
+h1{margin:0;font-size:clamp(20px,3vw,30px)}
+.sub{color:var(--mut);font-size:15px}
+nav{display:flex;gap:8px;padding:8px 20px;flex-wrap:wrap}
+nav button{flex:1;min-width:140px;padding:12px;border:2px solid var(--line);background:var(--card);color:var(--fg);border-radius:14px;font:inherit;font-weight:600;cursor:pointer}
+nav button.on{background:var(--accent);border-color:var(--accent);color:#fff}
+main{display:grid;grid-template-columns:minmax(280px,1fr) minmax(300px,1fr);gap:16px;padding:8px 20px 24px;max-width:1200px;margin:auto}
+main.wide{grid-template-columns:1fr}main.wide #stage{display:none}
+.card{background:var(--card);border:2px solid var(--line);border-radius:18px;padding:14px}
+#stage svg{width:100%;height:auto;max-height:72vh;display:block}
+#stage svg.off{display:none}
+.zone,.part{cursor:pointer}
+.zone rect.hit{fill:transparent}
+.zone.sel>rect:not(.hit),.zone.sel>path{stroke:var(--accent);stroke-width:4;animation:glow 1.2s ease-in-out infinite}
+.dim .zone:not(.sel){opacity:.4}
+@keyframes glow{50%{stroke-width:8}}
+.part.sel{stroke:var(--accent);stroke-width:5}
+.shake{animation:shake .4s}.ok{animation:okp .6s}
+@keyframes shake{25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+@keyframes okp{50%{filter:brightness(1.4)}}
+.hidden{display:none}
+#flow{display:none}.flowing #flow{display:block}
+h2{margin:0 0 6px;font-size:clamp(20px,2.4vw,28px)}
+.row{margin:10px 0;padding:10px 12px;border-radius:12px;background:var(--bg)}
+.row b{display:block;color:var(--accent);font-size:14px;text-transform:uppercase;letter-spacing:.04em}
+.btn{padding:12px 20px;border:0;border-radius:14px;background:var(--accent);color:#fff;font:inherit;font-weight:700;cursor:pointer;margin:6px 6px 0 0}
+.btn.alt{background:transparent;color:var(--fg);border:2px solid var(--line)}
+.dots{display:flex;gap:8px;margin:10px 0}
+.dots i{width:16px;height:16px;border-radius:50%;background:var(--line)}.dots i.v{background:var(--accent)}
+.big{font-size:clamp(20px,2.4vw,26px);font-weight:700}
+.opts{display:grid;gap:10px;margin:12px 0}
+.opts button{text-align:left;padding:14px;border:2px solid var(--line);border-radius:14px;background:var(--bg);color:var(--fg);font:inherit;cursor:pointer}
+.opts button.good{background:#2d8a4e;color:#fff;border-color:#2d8a4e}
+.opts button.bad{background:var(--bad);color:#fff;border-color:var(--bad)}
+.hint{color:var(--mut)}
+.celebrate{font-size:64px;animation:bounce 1s infinite}
+@keyframes bounce{50%{transform:translateY(-14px)}}
+@media (max-width:760px){main{grid-template-columns:1fr}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important}}
+</style></head><body>
+<header><h1>🌱 Лабораторная работа «Исследование зон корня»</h1>
+<div class="sub">7 класс · Биология · 7.1.3.3 внутреннее строение корня · 7.1.3.4 строение и функции</div></header>
+<nav id="nav"></nav>
+<main id="main"><div id="stage" class="card"></div><div id="panel" class="card"></div></main>
+<script>
+const Z={
+cond:{n:'Зона проведения',c:'#8fb8e8',y:[30,200],ly:60,
+ s:'Клетки образуют проводящие ткани: сосуды и ситовидные трубки. Поверхность покрыта пробкой, волосков нет. От неё отходят боковые корни.',
+ f:'Проводит воду и минеральные соли вверх к стеблю, а органические вещества вниз. Закрепляет растение, даёт боковые корни.',
+ w:'Проводящие ткани → проведение веществ'},
+abs:{n:'Зона всасывания',c:'#8fd6a8',y:[200,340],ly:270,
+ s:'Покрыта корневыми волосками: это выросты клеток покровной ткани. Волосков очень много, они тонкие. Живут несколько дней и заменяются новыми.',
+ f:'Всасывает воду и минеральные соли из почвы. Волоски во много раз увеличивают поверхность всасывания.',
+ w:'Корневые волоски → большая поверхность → всасывание'},
+grow:{n:'Зона роста',c:'#ffd77a',y:[340,440],ly:390,
+ s:'Клетки вытягиваются (растягиваются) в длину, в них появляются крупные вакуоли. Волосков ещё нет.',
+ f:'Корень удлиняется и продвигается в глубь почвы.',
+ w:'Растяжение клеток → рост корня в длину'},
+div:{n:'Зона деления',c:'#ff9aa2',y:[440,520],ly:480,
+ s:'Мелкие плотные клетки с тонкими стенками и крупным ядром (образовательная ткань). Верхушку закрывает корневой чехлик.',
+ f:'Клетки постоянно делятся, появляются новые клетки. Чехлик защищает верхушку, пока корень пробивается в почве.',
+ w:'Образовательная ткань → новые клетки'}};
+const P={
+hair:{n:'Корневой волосок',s:'Вырост одной клетки покровной ткани.',f:'Всасывает воду и минеральные соли, увеличивает поверхность всасывания.'},
+epi:{n:'Покровная ткань (кожица)',s:'Один слой плотно прилегающих клеток.',f:'Защищает корень и образует корневые волоски.'},
+cor:{n:'Кора (основная ткань)',s:'Крупные клетки, расположены рыхло, между ними воздух.',f:'Вода идёт от волосков к центру. Здесь запасаются питательные вещества (например, крахмал).'},
+cyl:{n:'Центральный цилиндр',s:'Проводящие пучки и образовательная ткань (перицикл) вокруг них.',f:'Проведение веществ. Из перицикла развиваются боковые корни.'},
+xyl:{n:'Сосуды (древесина)',s:'Длинные полые трубки из мёртвых клеток со стенками, укреплёнными лигнином.',f:'Вода и минеральные соли поднимаются вверх, к стеблю и листьям.'},
+phl:{n:'Ситовидные трубки (луб)',s:'Живые клетки с перегородками-«ситечками».',f:'Органические вещества (сахара) идут от листьев вниз, к корню.'}};
+const Q=[
+{q:'Какая зона корня даёт новые клетки?',o:['Зона деления','Зона роста','Зона всасывания','Зона проведения'],a:0,w:'Мелкие клетки с крупным ядром постоянно делятся.'},
+{q:'Что такое корневой волосок?',o:['Маленький боковой корешок','Вырост клетки покровной ткани','Часть сосуда','Клетка корневого чехлика'],a:1,w:'Волосок — вырост одной клетки кожицы.'},
+{q:'По каким клеткам вода и соли поднимаются к стеблю?',o:['По ситовидным трубкам','По клеткам коры','По сосудам','По корневому чехлику'],a:2,w:'Сосуды — полые трубки из мёртвых клеток.'},
+{q:'Что защищает верхушку корня в почве?',o:['Корневые волоски','Корневой чехлик','Пробка','Кора'],a:1,w:'Чехлик защищает зону деления.'},
+{q:'За счёт чего корень удлиняется в зоне роста?',o:['Клетки растягиваются','Появляются волоски','Клетки отмирают','Растёт пробка'],a:0,w:'Клетки вытягиваются, и корень растёт в длину.'},
+{q:'Что движется по ситовидным трубкам?',o:['Вода из почвы вверх','Органические вещества вниз','Воздух','Минеральные соли вверх'],a:1,w:'Сахара идут от листьев к корню.'}];
+const $=s=>document.querySelector(s),NS='http://www.w3.org/2000/svg';
+let step=0,vis=new Set(),g={},qz={};
+const steps=['1. Изучаем зоны','2. Проверь себя на корне','3. Срез корня','4. Мини-тест'];
+$('#nav').innerHTML=steps.map((t,i)=>`<button data-i="${i}">${t}</button>`).join('');
+$('#nav').onclick=e=>{const b=e.target.closest('button');if(b)go(+b.dataset.i)};
+function animate(a,v,d,b){return `<animate attributeName="${a}" values="${v}" dur="${d}s" begin="${b}s" repeatCount="indefinite"/>`}
+function rootSVG(){
+let s=`<svg id="rs" viewBox="0 0 400 590"><rect x="0" y="20" width="400" height="570" rx="16" fill="var(--soil)"/>`;
+for(let i=0;i<60;i++)s+=`<circle cx="${(i*67)%390+5}" cy="${(i*131)%550+30}" r="${2+i%3}" fill="#a08660" opacity=".35"/>`;
+s+=`<g id="zs">`;
+for(const k in Z){const z=Z[k],[a,b]=z.y;
+ s+=`<g class="zone" data-z="${k}"><rect class="hit" x="30" y="${a}" width="170" height="${b-a}"/><rect x="90" y="${a}" width="70" height="${b-a}" fill="${z.c}"/>`;
+ if(k=='div')s+=`<path d="M90 520H160Q160 566 125 578Q90 566 90 520Z" fill="#9c7b62"/>`;
+ if(k=='cond')s+=`<path d="M160 90Q200 95 235 130M90 150Q50 155 22 190" fill="none" stroke="#a07c4f" stroke-width="7" stroke-linecap="round"/>`;
+ if(k=='abs')for(let y=208,j=0;y<335;y+=9,j++){for(const d of[-1,1]){const x=d<0?90:160,L=24+j%3*5;
+  s+=`<line x1="${x}" y1="${y}" x2="${x+d*L}" y2="${y+(j%2?-5:4)}" stroke="#2d6a4f" stroke-width="2.5" stroke-linecap="round"><animateTransform attributeName="transform" type="rotate" values="-5 ${x} ${y};5 ${x} ${y};-5 ${x} ${y}" dur="${2+j%3}s" repeatCount="indefinite"/></line>`}}
+ if(k=='div')for(let r=0;r<3;r++)for(let c=0;c<4;c++)s+=`<circle cx="${103+c*17}" cy="${458+r*20}" r="6" fill="#fff" stroke="#b5485a" stroke-width="2"><animate attributeName="r" values="4;7;4" dur="1.6s" begin="${(r+c)*.2}s" repeatCount="indefinite"/></circle><circle cx="${103+c*17}" cy="${458+r*20}" r="2.5" fill="#b5485a"/>`;
+ if(k=='grow')for(let r=0;r<3;r++)for(const cx of[108,142])s+=`<ellipse cx="${cx}" cy="${360+r*28}" rx="13" ry="9" fill="#fff6d6" stroke="#b58a1d" stroke-width="2">${animate('ry','7;12;7',2.4,r*.3)}</ellipse>`;
+ s+=`</g>`}
+s+=`</g><rect x="117" y="30" width="16" height="410" rx="8" fill="#4aa3df" opacity=".55" pointer-events="none"/><g id="water" pointer-events="none">`;
+for(let i=0;i<6;i++)s+=`<circle cx="125" r="4.5" fill="#fff"><animate attributeName="cy" values="335;35" dur="4s" begin="${i*.66}s" repeatCount="indefinite"/><animate attributeName="opacity" values="0;1;1;0" dur="4s" begin="${i*.66}s" repeatCount="indefinite"/></circle>`;
+for(let i=0;i<8;i++){const l=i%2,y=215+i*14,x0=l?190:60,x1=l?135:115;
+ s+=`<circle r="4" fill="#2aa4ff"><animate attributeName="cx" values="${x0};${x1}" dur="2s" begin="${i*.25}s" repeatCount="indefinite"/><animate attributeName="cy" values="${y};${y+14}" dur="2s" begin="${i*.25}s" repeatCount="indefinite"/></circle>`}
+s+=`</g><g id="lbl" font-size="17" font-weight="700" fill="var(--fg)">`;
+for(const k in Z){const z=Z[k];s+=`<g id="l-${k}"><line x1="165" y1="${z.ly}" x2="205" y2="${z.ly}" stroke="var(--fg)" stroke-width="2"/><text x="210" y="${z.ly+5}">${z.n}</text></g>`}
+s+=`<g id="l-cap" font-size="14"><text x="175" y="570">Корневой чехлик</text></g><g font-size="13" font-weight="500" fill="var(--mut)"><text x="236" y="150">боковой корень</text><text x="40" y="206" fill="var(--fg)" font-size="13">волоски</text></g></g></svg>`;
+return s}
+function cutSVG(){
+const C=200,pt=(a,r)=>[C+r*Math.cos(a),C+r*Math.sin(a)];
+let s=`<svg id="cs" class="off" viewBox="0 0 400 400"><rect width="400" height="400" rx="16" fill="var(--soil)"/>`;
+for(let i=0;i<12;i++){const a=i*Math.PI/6,[x1,y1]=pt(a,150),[x2,y2]=pt(a,188);s+=`<line class="part" data-p="hair" x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="#2d6a4f" stroke-width="5" stroke-linecap="round"/>`}
+s+=`<circle class="part" data-p="cor" cx="${C}" cy="${C}" r="142" fill="#cfe9c6"/>`;
+for(const[r,n]of[[118,14],[92,10]])for(let i=0;i<n;i++){const[x,y]=pt(i*2*Math.PI/n+r/50,r);s+=`<circle class="part" data-p="cor" cx="${x}" cy="${y}" r="13" fill="#e8f6e0" stroke="#8fc17f" stroke-width="2"/>`}
+s+=`<circle class="part" data-p="epi" cx="${C}" cy="${C}" r="146" fill="none" stroke="#4f9d62" stroke-width="12"/><circle class="part" data-p="cyl" cx="${C}" cy="${C}" r="64" fill="#fff3d6" stroke="#e0b861" stroke-width="4"/>`;
+for(let i=0;i<4;i++){const[x,y]=pt(i*Math.PI/2,30);s+=`<circle class="part" data-p="xyl" cx="${x}" cy="${y}" r="17" fill="#4aa3df" stroke="#1f6fa8" stroke-width="3"/>`;
+ const[u,v]=pt(i*Math.PI/2+Math.PI/4,40);s+=`<circle class="part" data-p="phl" cx="${u}" cy="${v}" r="9" fill="#f4a259" stroke="#c46d1b" stroke-width="3"/>`}
+s+=`<g id="flow" pointer-events="none">`;
+for(let i=0;i<12;i++){const a=i*Math.PI/6+.26,[x0,y0]=pt(a,185),[x1,y1]=pt(a,58);
+ s+=`<circle r="5" fill="#2aa4ff" stroke="#fff" stroke-width="1.5"><animate attributeName="cx" values="${x0};${x1}" dur="3s" begin="${i*.25}s" repeatCount="indefinite"/><animate attributeName="cy" values="${y0};${y1}" dur="3s" begin="${i*.25}s" repeatCount="indefinite"/></circle>`}
+return s+`</g></svg>`}
+$('#stage').innerHTML=rootSVG()+cutSVG();
+const rs=$('#rs'),cs=$('#cs');
+function row(t,x){return `<div class="row"><b>${t}</b>${x}</div>`}
+function selZone(k){rs.classList.toggle('dim',!!k);rs.querySelectorAll('.zone').forEach(z=>z.classList.toggle('sel',z.dataset.z==k))}
+rs.onclick=e=>{const z=e.target.closest('.zone');if(!z)return;const k=z.dataset.z;
+ if(step==0){selZone(k);vis.add(k);p1(k)}
+ else if(step==1)answer(k,z)};
+cs.onclick=e=>{const p=e.target.closest('.part');if(!p||step!=2)return;const k=p.dataset.p;
+ cs.querySelectorAll('.part').forEach(x=>x.classList.toggle('sel',x.dataset.p==k));p3(k)};
+function go(i){step=i;
+ document.querySelectorAll('#nav button').forEach((b,j)=>b.classList.toggle('on',j==i));
+ $('#main').classList.toggle('wide',i==3);
+ rs.classList.toggle('off',i==2);cs.classList.toggle('off',i!=2);
+ selZone(null);$('#lbl').classList.toggle('hidden',false);
+ for(const k in Z)$('#l-'+k).classList.remove('hidden');$('#l-cap').classList.remove('hidden');
+ if(i==0)p1();if(i==1)start2();if(i==2)p3();if(i==3){qz={i:0,s:0,d:0};p4()}}
+function dots(){return `<div class="dots">${Object.keys(Z).map(k=>`<i class="${vis.has(k)?'v':''}"></i>`).join('')}</div>`}
+function p1(k){const z=Z[k],pn=$('#panel');
+ if(!k){pn.innerHTML=`<h2>Исследуем корень</h2><p>Нажимай на зоны корня. Вода (белые и синие точки) показывает, как работает корень.</p>${dots()}<p class="hint">Изучи все 4 зоны. Нажми на любую зону.</p>`;return}
+ pn.innerHTML=`<h2 style="color:${z.c}">●</h2><h2 style="margin-top:-38px;padding-left:28px">${z.n}</h2>${row('Строение',z.s)}${row('Функция',z.f)}${row('Запиши в тетрадь',z.w)}${dots()}${vis.size==4?'<button class="btn" onclick="go(1)">Проверим себя →</button>':'<span class="hint">Осталось зон: '+(4-vis.size)+'</span>'}`}
+const PR=[['div','Здесь клетки мелкие и постоянно делятся.'],['abs','Здесь много корневых волосков, корень впитывает воду.'],['cond','Отсюда отходят боковые корни, вода идёт вверх к стеблю.'],['grow','Здесь клетки растягиваются, и корень удлиняется.'],['abs','Эта зона всасывает воду и минеральные соли.'],['div','Эту зону защищает корневой чехлик.']];
+function start2(){g={i:0,ok:0,t:0};$('#lbl').classList.remove('hidden');
+ for(const k in Z)$('#l-'+k).classList.add('hidden');$('#l-cap').classList.add('hidden');p2()}
+function p2(msg){const pn=$('#panel');
+ if(g.i>=PR.length){$('#l-cap').classList.remove('hidden');pn.innerHTML=`<div class="celebrate">🎉</div><h2>Готово!</h2><p class="big">С первой попытки: ${g.ok} из ${PR.length}</p>${row('Вывод','Строение каждой зоны связано с её функцией.')}<button class="btn" onclick="go(2)">К срезу корня →</button><button class="btn alt" onclick="start2()">Ещё раз</button>`;return}
+ pn.innerHTML=`<h2>Найди зону на корне</h2><div class="hint">Задание ${g.i+1} из ${PR.length}</div><p class="big">${PR[g.i][1]}</p><p class="hint">${msg||'Нажми на нужную зону корня.'}</p>`}
+function answer(k,el){if(g.i>=PR.length)return;
+ if(k==PR[g.i][0]){if(!g.w)g.ok++;g.w=0;$('#l-'+k).classList.remove('hidden');el.classList.add('ok');setTimeout(()=>el.classList.remove('ok'),700);g.i++;p2()}
+ else{g.w=1;el.classList.add('shake');setTimeout(()=>el.classList.remove('shake'),500);p2('Не совсем. Подумай ещё и попробуй другую зону.')}}
+function p3(k){const pn=$('#panel'),on=cs.classList.contains('flowing');
+ const btn=`<button class="btn" onclick="cs.classList.toggle('flowing');p3(window.lastP)">${on?'⏸ Остановить воду':'💧 Запустить воду'}</button>`;
+ window.lastP=k;
+ if(!k){pn.innerHTML=`<h2>Поперечный срез корня</h2><p>Нажимай на части среза и узнавай, из чего состоит корень внутри.</p>${btn}<p class="hint">Волоски, кожица, кора, центральный цилиндр, сосуды и ситовидные трубки.</p>`;return}
+ const p=P[k];pn.innerHTML=`<h2>${p.n}</h2>${row('Строение',p.s)}${row('Функция',p.f)}${btn}${on?'<p class="hint">Вода идёт от волосков через кору к сосудам, а потом вверх к стеблю.</p>':''}`}
+function p4(){const pn=$('#panel');
+ if(qz.i>=Q.length){pn.innerHTML=`<div class="celebrate">🏆</div><h2>Результат: ${qz.s} из ${Q.length}</h2><p>${qz.s>=5?'Отлично! Ты хорошо понимаешь строение корня.':qz.s>=3?'Хорошо! Вернись к зонам и срезу и повтори.':'Давай повторим зоны и срез корня.'}</p><button class="btn" onclick="go(0)">Повторить</button><button class="btn alt" onclick="go(3)">Пройти ещё раз</button>`;return}
+ const q=Q[qz.i];qz.d=0;
+ pn.innerHTML=`<div class="hint">Вопрос ${qz.i+1} из ${Q.length}</div><h2>${q.q}</h2><div class="opts">${q.o.map((t,i)=>`<button data-i="${i}">${t}</button>`).join('')}</div><div id="fb" class="hint"></div>`;
+ pn.querySelector('.opts').onclick=e=>{const b=e.target.closest('button');if(!b||qz.d)return;const i=+b.dataset.i;
+  if(i==q.a){qz.d=1;if(!qz.w)qz.s++;b.classList.add('good');$('#fb').innerHTML=q.w+'<br><button class="btn" onclick="qz.i++;qz.w=0;p4()">Дальше →</button>'}
+  else{qz.w=1;b.classList.add('bad','shake');$('#fb').textContent='Попробуй ещё раз.'}}}
+go(0);
+</script></body></html>
