@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="ru"><head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ТЕРМОЛАБОРАТОРИЯ · 6 класс</title>
+<style>
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%;font-family:'Segoe UI',Arial,sans-serif;color:#fff}
+body{background:#0b1f4a}
+button{font:inherit;cursor:pointer;touch-action:manipulation}button:disabled{cursor:default}
+.app{min-height:100vh;display:grid;grid-template-columns:250px 1fr;background:linear-gradient(135deg,#1c2f7a,#0e6aa6 55%,#12a38a);background-size:200% 200%;animation:bgs 18s ease-in-out infinite}
+@keyframes bgs{50%{background-position:100% 100%}}
+.fx{position:fixed;inset:0;pointer-events:none;overflow:hidden;z-index:0}
+.fx span{position:absolute;bottom:-60px;opacity:0;animation:rise linear infinite}
+@keyframes rise{10%{opacity:.6}100%{transform:translate(var(--dx),-115vh) rotate(360deg);opacity:0}}
+.side{position:sticky;top:0;height:100vh;overflow:auto;padding:18px 12px;background:linear-gradient(180deg,#14275e,#0e4d86);z-index:2}
+.brand{display:flex;gap:10px;align-items:center;padding:0 6px 16px;font-weight:900;letter-spacing:.05em}
+.logo{width:44px;height:44px;border-radius:14px;background:linear-gradient(125deg,#6ce3ff,#3577f0);display:grid;place-items:center;font-size:24px;animation:wob 3s ease-in-out infinite}
+@keyframes wob{50%{transform:rotate(10deg) scale(1.08)}}
+.nv{width:100%;display:flex;gap:10px;align-items:center;text-align:left;padding:9px;margin:3px 0;border:2px solid transparent;border-radius:14px;background:transparent;color:#dbe8ff;font-weight:800;font-size:14px}
+.nv:hover{background:#ffffff1f}.nv.on{background:#ffffff2b;border-color:#ffe56f;color:#fff}
+.nv i{font-style:normal;width:34px;height:34px;border-radius:11px;background:#ffffff22;display:grid;place-items:center;font-size:18px;transition:.2s;flex:none}
+.nv:hover i{transform:rotate(-12deg) scale(1.2)}.nv.on i{background:#fff4b8;animation:hop 1.1s ease-in-out infinite}
+@keyframes hop{50%{transform:translateY(-5px) scale(1.1)}}
+.ok{margin-left:auto;color:#7dffc4}
+.content{position:relative;z-index:1;padding:18px clamp(14px,3vw,50px) 60px;max-width:1300px;width:100%;margin:auto}
+.top{display:flex;justify-content:flex-end;gap:8px;flex-wrap:wrap;margin-bottom:14px}
+.tb{border:0;border-radius:13px;padding:10px 14px;background:#ffffff26;color:#fff;font-weight:800}.tb:hover{background:#ffffff40}
+#score{background:#ffe56f;color:#5a3800;border-radius:13px;padding:10px 16px;font-weight:900}
+#score.pop{animation:sp .6s}@keyframes sp{40%{transform:scale(1.35) rotate(-6deg)}}
+.hero{position:relative;overflow:hidden;border-radius:28px;padding:clamp(22px,3vw,44px);background:linear-gradient(120deg,#ff6fae,#7c5cff 45%,#17b6e8);background-size:200% 200%;animation:bgs 9s ease infinite;border:3px solid #fff5}
+.hero h1{font-size:clamp(34px,5vw,64px);margin:6px 0 10px;line-height:1.05;text-shadow:0 4px 0 #0003}
+.hero p{max-width:680px;font-size:clamp(15px,1.4vw,20px);line-height:1.55;position:relative;z-index:1}
+.flo{position:absolute;font-size:clamp(34px,5vw,66px);animation:flo 4s ease-in-out infinite}
+@keyframes flo{50%{transform:translateY(-18px) rotate(12deg)}}
+.card{background:#1a3c80;border:3px solid #7ec8ff66;border-radius:26px;padding:clamp(16px,2.4vw,28px);margin:16px 0}
+.card h2{margin:0 0 10px}
+.enter .card,.enter .hero{animation:pop .5s cubic-bezier(.2,1.4,.4,1)}
+@keyframes pop{0%{transform:scale(.9);opacity:0}}
+.enter .an>*{animation:sl .45s both}
+.enter .an>*:nth-child(2){animation-delay:.07s}.enter .an>*:nth-child(3){animation-delay:.14s}.enter .an>*:nth-child(4){animation-delay:.21s}.enter .an>*:nth-child(5){animation-delay:.28s}
+@keyframes sl{0%{transform:translateX(-30px);opacity:0}}
+.tag{display:inline-block;background:#ffe56f;color:#5a3800;border-radius:10px;padding:6px 12px;font-weight:900;font-size:13px}
+.q{font-size:clamp(22px,2.7vw,36px);font-weight:900;line-height:1.2;margin:14px 0 20px}
+.pbar{height:15px;border-radius:20px;background:#ffffff2a;overflow:hidden;margin:12px 0 6px}
+.pbar span{display:block;height:100%;background:repeating-linear-gradient(45deg,#ffe56f 0 12px,#ffbf2e 12px 24px);background-size:34px 34px;animation:str 1s linear infinite;transition:width .3s}
+@keyframes str{to{background-position:34px 0}}
+.mh h1{margin:8px 0 4px;font-size:clamp(26px,3.2vw,44px)}.mh p{margin:0;opacity:.85}
+.ans{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.ans.five{grid-template-columns:repeat(5,1fr)}
+.a{min-height:78px;border:0;border-radius:20px;padding:14px 18px;color:#fff;font-weight:850;font-size:clamp(16px,1.6vw,23px);text-align:left;box-shadow:0 6px 0 #0004;transition:.15s}
+.a:nth-child(5n+1){background:#e0457b}.a:nth-child(5n+2){background:#2f7de1}.a:nth-child(5n+3){background:#12a37f}.a:nth-child(5n+4){background:#d97706}.a:nth-child(5n+5){background:#8a5cf0}
+.a:hover:not(:disabled){transform:translateY(-4px) rotate(-.6deg)}.a:active:not(:disabled){transform:translateY(4px);box-shadow:0 1px 0 #0004}
+.ans .a.g{background:#14a86b;animation:jmp .6s}.ans .a.b{background:#7a2340;animation:shk .45s}.ans .a.d{opacity:.45}
+@keyframes jmp{40%{transform:translateY(-14px) scale(1.04)}}
+@keyframes shk{25%{transform:translateX(-9px)}75%{transform:translateX(9px)}}
+.fb{margin-top:16px;border-radius:16px;padding:14px 18px;font-size:18px;line-height:1.45}.fb.g{background:#14a86b55;border:2px solid #7dffc4}.fb.b{background:#d6355a55;border:2px solid #ff9eae}
+.nx{display:flex;justify-content:flex-end;margin-top:16px}
+.btn{border:0;border-radius:18px;padding:15px 26px;font-weight:900;font-size:18px;color:#3b2500;background:linear-gradient(180deg,#ffe56f,#ffb300);box-shadow:0 6px 0 #c77f00,0 14px 28px #0004}
+.btn:active:not(:disabled){transform:translateY(5px);box-shadow:0 1px 0 #c77f00}.btn:disabled{opacity:.45}
+.pl{animation:pul 1.5s ease-in-out infinite}@keyframes pul{50%{transform:scale(1.06)}}
+.mg{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.mi{display:block;width:100%;margin:7px 0;padding:14px;border:0;border-radius:14px;background:#2f6fd0;color:#fff;font-weight:800;font-size:clamp(14px,1.3vw,19px);text-align:left;min-height:62px;box-shadow:0 4px 0 #0004}
+.mi:hover:not(:disabled){transform:scale(1.03) rotate(-.6deg)}.mi.sel{background:#e0457b;box-shadow:0 0 0 3px #ffe56f}.mi.so{background:#14a86b;opacity:.7;animation:jmp .6s}.mi.wr{animation:shk .45s;background:#7a2340}
+.ni{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+.ni input{height:66px;width:210px;font-size:32px;font-weight:900;padding:8px 16px;border:0;border-radius:16px;color:#0b2846}
+.od{display:flex;gap:12px;align-items:center;background:#2f6fd0;border-radius:15px;padding:9px 12px;margin:8px 0;font-weight:750;font-size:clamp(15px,1.4vw,19px)}
+.od b{width:34px;height:34px;display:grid;place-items:center;border-radius:10px;background:#ffe56f;color:#5a3800;flex:none}.od span{flex:1}
+.od button{width:44px;height:44px;border:0;border-radius:12px;background:#ffffff33;color:#fff;font-size:20px;margin-left:4px}
+.strip{height:36px;position:relative;display:flex;border-radius:12px;margin:60px 4px 56px;border:2px solid #fff8}
+.sg{height:100%}.so{background:repeating-linear-gradient(45deg,#568ad1 0 14px,#78a6e8 14px 28px)}
+.li{background:linear-gradient(90deg,#3fd0e8,#9bf0fa,#3fd0e8);background-size:200% 100%;animation:wv 2s linear infinite}
+.ga{background:linear-gradient(90deg,#eac36f,#fff0b8,#eac36f);background-size:200% 100%;animation:wv 3s linear infinite}
+@keyframes wv{to{background-position:200% 0}}
+.th{position:absolute;top:42px;transform:translateX(-50%);font-weight:900;font-size:13px;white-space:nowrap}
+.th:before{content:'';position:absolute;top:-44px;left:50%;height:40px;border-left:2px dashed #fff}
+.mk{position:absolute;top:-16px;transform:translateX(-50%);background:#fff;border:3px solid #ffbf57;color:#1d3555;padding:6px 12px;border-radius:12px;font-size:18px;font-weight:950;white-space:nowrap;animation:bt 1.2s ease-in-out infinite}
+@keyframes bt{50%{top:-26px}}
+.sl3{display:flex;justify-content:space-between;opacity:.85;font-weight:700;font-size:14px}
+.cv{background:#0b2444;border-radius:18px;padding:8px;max-width:900px;margin:0 auto 18px}.cv svg{width:100%;display:block;max-height:320px}
+.cv path.dr{stroke-dasharray:1;animation:dr 3s ease forwards}@keyframes dr{from{stroke-dashoffset:1}to{stroke-dashoffset:0}}
+table{border-collapse:collapse;width:100%}th,td{padding:10px;text-align:left;border-bottom:1px solid #ffffff33}th{font-size:12px;text-transform:uppercase;opacity:.8}
+.end{text-align:center;padding:30px}.end .tr{font-size:84px;display:block;animation:bnc 1s ease-in-out infinite}
+@keyframes bnc{50%{transform:translateY(-16px) rotate(8deg) scale(1.1)}}
+.ov{position:fixed;inset:0;background:#031020cc;z-index:100;display:none;align-items:center;justify-content:center;padding:16px}.ov.open{display:flex}
+.md{background:#1a3c80;border:3px solid #7ec8ff;border-radius:24px;max-width:760px;width:100%;padding:22px;max-height:90vh;overflow:auto}
+#mascot{position:fixed;right:16px;bottom:10px;width:104px;z-index:60;pointer-events:none}
+#mascot svg{width:100%;display:block;transform-origin:50% 100%;animation:mb 2.4s ease-in-out infinite;filter:drop-shadow(0 8px 10px #0005)}
+@keyframes mb{50%{transform:translateY(-8px) rotate(3deg)}}
+#mascot.happy svg{animation:j2 .8s}@keyframes j2{30%{transform:translateY(-40px) scale(1.12) rotate(-8deg)}60%{transform:translateY(-8px) rotate(6deg)}}
+#mascot.sad svg{animation:shk .6s}
+#mascot .m2,#mascot .m3{display:none}#mascot.happy .m1,#mascot.sad .m1{display:none}#mascot.happy .m2{display:block}#mascot.sad .m3{display:block}
+#bub{position:absolute;right:6px;bottom:100%;margin-bottom:4px;background:#fff;color:#0b2846;padding:9px 14px;border-radius:16px;font-weight:900;font-size:16px;white-space:nowrap;opacity:0;transform:scale(.6);transform-origin:90% 100%;transition:.25s}
+#mascot.say #bub{opacity:1;transform:scale(1)}
+.cf{position:fixed;top:-30px;z-index:90;pointer-events:none;animation:fall linear forwards}
+@keyframes fall{to{transform:translate(var(--dx),110vh) rotate(var(--r))}}
+@media(max-width:1000px){.app{grid-template-columns:1fr}.side{position:relative;height:auto;display:flex;gap:6px;overflow-x:auto;padding:8px}.brand{display:none}.nv{min-width:150px;flex:none}.ans.five{grid-template-columns:1fr 1fr}}
+@media(max-width:650px){.ans,.mg{grid-template-columns:1fr}#mascot{width:64px}#bub{font-size:13px;padding:6px 9px}}
+@media(prefers-reduced-motion:reduce){*{animation:none!important}.fx,.cf{display:none}}
+</style></head><body>
+<div class="app">
+<aside class="side"><div class="brand"><div class="logo">🌡️</div><div>ТЕРМО<br>ЛАБОРАТОРИЯ</div></div><div id="nav"></div></aside>
+<main class="content"><div class="top"><div id="score">★ 0</div><button class="tb" id="tbl">📋 Таблица</button><button class="tb" id="full">⛶ Экран</button><button class="tb" id="rst">↻ Сброс</button></div><div id="main"></div></main>
+</div>
+<div class="ov" id="ov"><div class="md"><button class="tb" id="cl" style="float:right">Закрыть ✕</button><h2>📋 Справочник</h2><div id="mb"></div></div></div>
+<script>
+'use strict';
+const $=s=>document.querySelector(s),R=a=>a[Math.floor(Math.random()*a.length)];
+const E=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const SUB={water:['Вода',0,100],ethanol:['Этанол',-114,78],oxygen:['Кислород',-219,-183],nitrogen:['Азот',-210,-196],aluminum:['Алюминий',660,2470],copper:['Медь',1085,2562],iron:['Железо',1538,2862]};
+const Q=(q,o,r,w,vis)=>({q,o,r,w,vis});
+const SC=['Плавление','Кристаллизация','Кипение','Испарение','Конденсация'],PH=['Твёрдое','Жидкое','Газообразное'];
+function strip(id,t){const[,m,b]=SUB[id],g=Math.max(10,(b-m)*.13),lo=Math.min(t,m)-g,hi=Math.max(t,b)+g,p=x=>Math.max(0,Math.min(100,100*(x-lo)/(hi-lo))),a=p(m),c=p(b);
+return `<div class="strip"><div class="sg so" style="width:${a}%"></div><div class="sg li" style="width:${c-a}%"></div><div class="sg ga" style="width:${100-c}%"></div><div class="th" style="left:${a}%">Tпл ${m}°</div><div class="th" style="left:${c}%">Tкип ${b}°</div><div class="mk" style="left:${p(t)}%">${t} °C</div></div><div class="sl3"><span>❄️ Твёрдое</span><span>💧 Жидкое</span><span>☁️ Газ</span></div>`}
+const CURVE=`<div class="cv"><svg viewBox="0 0 800 340"><defs><linearGradient id="bc" x1="0" x2="1"><stop stop-color="#6edcf9"/><stop offset="1" stop-color="#ffdc87"/></linearGradient></defs><path d="M80 27V300H752" stroke="#9bbbe0" stroke-width="3" fill="none"/><text x="14" y="20" fill="#cfe6ff" font-size="17">T, °C</text><text x="640" y="330" fill="#cfe6ff" font-size="17">Время нагрева →</text><path id="cvp" d="M80 275L186 242L300 242L445 116L563 116L674 55" fill="none" stroke="url(#bc)" stroke-width="8" stroke-linejoin="round" stroke-linecap="round" pathLength="1"/><path d="M75 242H690M75 116H690" stroke="#9bbbe0" stroke-dasharray="5 8" opacity=".5"/><text x="28" y="247" fill="#fff" font-size="18">0</text><text x="15" y="122" fill="#fff" font-size="18">100</text><g font-size="23" font-weight="bold" fill="#ffefaf"><text x="120" y="247">A</text><text x="234" y="225">B</text><text x="362" y="180">C</text><text x="497" y="97">D</text><text x="618" y="74">E</text></g><circle r="9" fill="#fff" stroke="#ff6fae" stroke-width="4"><animateMotion dur="6s" repeatCount="indefinite" path="M80 275L186 242L300 242L445 116L563 116L674 55"/></circle></svg></div>`;
+const th=[['water',-20,0,'−20 °C ниже 0 °C.'],['water',25,1,'25 °C между 0 и 100 °C.'],['water',120,2,'120 °C выше 100 °C.'],['ethanol',-120,0,'−120 °C ниже −114 °C.'],['ethanol',20,1,'20 °C между −114 и 78 °C.'],['ethanol',90,2,'90 °C выше 78 °C.'],['oxygen',-200,1,'−200 между −219 и −183.'],['nitrogen',-190,2,'−190 выше −196 °C.']];
+const sortI=[['Лёд растаял на ладони',0],['Расплавленный металл затвердел',1],['Вода активно пузырится в кастрюле',2],['Лужа исчезла после тёплого дня',3],['Пар запотел на холодном зеркале',4],['Вода стала кубиком льда',1],['В чайнике по всему объёму образуются пузырьки пара',2],['Роса появилась из пара в воздухе',4]];
+const M=[
+{n:'Что происходит?',ic:'⚡',t:'quiz',d:'Разминка: назови явление.',items:[
+Q('Лёд превратился в воду. Это…',['Кипение','Плавление','Конденсация','Кристаллизация'],1,'Твёрдое → жидкое: плавление.'),
+Q('Вода в морозилке стала льдом. Это…',['Кристаллизация','Плавление','Испарение','Кипение'],0,'Жидкость → твёрдое: кристаллизация.'),
+Q('Пузырьки пара появились по всему объёму жидкости. Это…',['Конденсация','Испарение','Кипение','Плавление'],2,'Пар внутри жидкости — признак кипения.'),
+Q('На холодном стекле появились капли. Это…',['Кристаллизация','Конденсация','Плавление','Растворение'],1,'Газ → жидкость: конденсация.'),
+Q('Мокрая одежда высохла при +20 °C. Это…',['Испарение','Кипение','Плавление','Кристаллизация'],0,'Испарение идёт и ниже температуры кипения.'),
+Q('Вода при 1 атм кипит примерно при…',['0 °C','78 °C','100 °C','660 °C'],2,'Tкип воды ≈ 100 °C.')]},
+{n:'Найди пару',ic:'🧩',t:'match',d:'Нажми понятие слева, потом определение справа.',items:[['Плавление','Твёрдое → жидкое'],['Кристаллизация','Жидкое → твёрдое'],['Кипение','Пар образуется по всему объёму жидкости'],['Испарение','Переход с поверхности жидкости без кипения'],['Конденсация','Газ → жидкость'],['0 °C','Плавление льда при 1 атм'],['100 °C','Кипение воды при 1 атм'],['78 °C','Кипение этанола при 1 атм']]},
+{n:'Сортировщик',ic:'📦',t:'quiz',d:'Какой это процесс?',five:1,items:sortI.map(([s,c])=>Q('«'+s+'»',SC,c,'Это '+SC[c].toLowerCase()+'.'))},
+{n:'Живой термометр',ic:'🌡️',t:'quiz',d:'Сравни температуру с Tпл и Tкип.',items:th.map(([id,t,r,w])=>Q('Состояние: '+SUB[id][0].toLowerCase()+' при '+t+' °C?',PH,r,w,strip(id,t)))},
+{n:'Таблица чисел',ic:'🔢',t:'num',d:'Открой справочник 📋 и введи число.',items:[['Tкип воды, °C',100,'Вода кипит при 100 °C.'],['Tкип этанола, °C',78,'Этанол кипит при 78 °C.'],['На сколько Tкип воды выше, чем этанола?',22,'100 − 78 = 22.'],['Tпл алюминия, °C',660,'Алюминий плавится при 660 °C.'],['Tпл меди, °C',1085,'Медь плавится при 1085 °C.'],['На сколько Tпл меди выше, чем алюминия?',425,'1085 − 660 = 425.']]},
+{n:'Кривая нагрева',ic:'📈',t:'quiz',d:'Читай график нагревания воды.',items:[
+Q('Где нагревается лёд до плавления?',['A','B','C','D'],0,'A — нагрев твёрдого.',CURVE),
+Q('Где лёд и вода плавятся вместе?',['A','B','C','E'],1,'B — плато плавления.',CURVE),
+Q('Где нагревается жидкая вода?',['A','B','C','D'],2,'C — нагрев жидкости.',CURVE),
+Q('Где вода кипит?',['B','C','D','E'],2,'D — плато кипения.',CURVE),
+Q('Почему B и D горизонтальные?',['Тепло не поступает','Энергия идёт на смену состояния','Температура равна нулю','Вода исчезла'],1,'При переходе температура чистого вещества постоянна.',CURVE)]},
+{n:'Расставь порядок',ic:'🔁',t:'ord',d:'Стрелками ↑ ↓ выстрой этапы по порядку.',items:[
+{q:'Нагреваем лёд от −20 до +120 °C',s:['Лёд нагревается до 0 °C','Лёд плавится','Вода нагревается до 100 °C','Вода кипит','Остаётся пар','Пар нагревается до 120 °C']},
+{q:'Охлаждаем пар от +120 до −20 °C',s:['Пар остывает до 100 °C','Пар конденсируется','Вода остывает до 0 °C','Вода кристаллизуется','Остаётся лёд','Лёд остывает до −20 °C']}]},
+{n:'Научный детектив',ic:'🕵️',t:'quiz',d:'Объясни реальные ситуации.',items:[
+Q('Вода и этанол нагревают одинаково. Что закипит раньше?',['Вода','Этанол','Одновременно','Ничего'],1,'Tкип этанола ниже: 78 °C против 100 °C.'),
+Q('«Если жидкость испаряется, она кипит». Верно?',['Верно','Неверно: испарение бывает ниже Tкип','Испаряются только металлы','Нельзя ответить'],1,'Испарение идёт с поверхности при разных температурах.'),
+Q('Температура тающей смеси льда и воды при 1 атм?',['0 °C','50 °C','100 °C','Зависит от массы'],0,'Пока идёт плавление, около 0 °C.'),
+Q('Что будет газом при −190 °C?',['Азот','Кислород','Оба жидкости','Оба твёрдые'],0,'Азот кипит при −196, а кислород при −183 °C.'),
+Q('Почему в горах вода кипит ниже 100 °C?',['Давление ниже','Вода меняет состав','Там больше кислорода','Вода солёная'],0,'Меньше давление — ниже Tкип.')]},
+{n:'Верно или миф?',ic:'✅',t:'quiz',d:'Проверь утверждения.',items:[
+['Все жидкости кипят при 100 °C.',1,'100 °C — только для воды при 1 атм.'],['Плавление — переход из твёрдого в жидкое.',0,'Это определение плавления.'],['Этанол закипит раньше воды.',0,'78 °C < 100 °C.'],['Испарение возможно ниже Tкип.',0,'Испарение идёт с поверхности.'],['При кипении пузырьки пара образуются по всему объёму.',0,'Это признак кипения.'],['Tкип не зависит от давления.',1,'Зависит от давления.'],['При −20 °C вода при 1 атм — газ.',1,'Это лёд.'],['Алюминий плавится при более высокой T, чем лёд.',0,'660 °C > 0 °C.']].map(([q,r,w])=>Q(q,['Верно','Неверно'],r,w))},
+{n:'Финальный босс',ic:'🏆',t:'quiz',d:'Последняя проверка!',items:[
+Q('Переход «газ → жидкость»?',['Кипение','Кристаллизация','Конденсация','Плавление'],2,'Это конденсация.'),
+Q('Вода при +40 °C (1 атм) — это…',['Твёрдое','Жидкое','Газ','Три состояния сразу'],1,'Между 0 и 100 °C вода жидкая.'),
+Q('Этанол при −130 °C (1 атм) —…',['Твёрдое','Жидкое','Газ','Плазма'],0,'−130 ниже −114 °C.'),
+Q('У кого Tкип ниже?',['Вода','Этанол','Алюминий','Железо'],1,'Этанол: 78 °C.'),
+Q('Какая пара процессов обратная?',['Плавление и кристаллизация','Плавление и кипение','Кипение и нагрев','Испарение и плавление'],0,'Твёрдое ↔ жидкое.'),
+Q('Алюминий при 700 °C (1 атм)?',['Твёрдый','Жидкий','Газ','Лёд'],1,'660 < 700 < 2470 °C.'),
+Q('Почему на плато температура постоянна?',['Энергия идёт на смену состояния','Нагрев выключен','Частицы исчезли','Вещество стало другим'],0,'Меняется состояние, не состав.'),
+Q('Как найти состояние вещества?',['Сравнить T с Tпл и Tкип','Угадать','По цвету','По массе'],0,'Нужны оба порога.')]}
+];
+let cur=-1,S=[],res=null,pick=null,ord=[],bad=0;
+const reset=()=>{S=M.map(()=>({i:0,h:0,done:false,sv:[]}));cur=-1;res=null};reset();
+const total=()=>S.reduce((a,s)=>a+s.h,0),dn=()=>S.filter(s=>s.done).length;
+function nav(){$('#nav').innerHTML=`<button class="nv ${cur<0?'on':''}" data-m="-1"><i>🏠</i>Главная</button>`+M.map((m,k)=>`<button class="nv ${cur===k?'on':''}" data-m="${k}"><i>${m.ic}</i>${E(m.n)}${S[k].done?'<span class="ok">✓</span>':''}</button>`).join('')}
+function go(k){cur=k;res=null;pick=null;ord=[];bad=0;render(1);scrollTo(0,0)}
+function frame(m,body){const n=m.items.length,i=S[cur].i;return `<div class="mh"><span class="tag">МИССИЯ ${cur+1} / ${M.length}</span><h1>${m.ic} ${E(m.n)}</h1><p>${E(m.d)}</p></div><div class="pbar"><span style="width:${100*i/n}%"></span></div><div>Задание ${Math.min(i+1,n)} из ${n}</div>${body}`}
+const fb=(ok,w)=>`<div class="fb ${ok?'g':'b'}"><b>${ok?'✓ Верно!':'✗ Не совсем.'}</b> ${E(w)}</div>`;
+const nxt=(en,last)=>`<div class="nx"><button class="btn ${en?'pl':''}" id="nx" ${en?'':'disabled'}>${last?'Завершить 🏁':'Дальше →'}</button></div>`;
+function rQuiz(m){const it=m.items[S[cur].i],last=S[cur].i==m.items.length-1;
+return frame(m,`<div class="card"><div class="q">${E(it.q)}</div>${it.vis||''}<div class="ans an ${m.five?'five':''}">${it.o.map((o,k)=>`<button class="a ${res?(k==it.r?'g':k==res.p?'b':'d'):''}" data-c="${k}" ${res?'disabled':''}>${E(o)}</button>`).join('')}</div>${res?fb(res.ok,it.w):''}${nxt(res,last)}</div>`)}
+function rNum(m){const it=m.items[S[cur].i],last=S[cur].i==m.items.length-1;
+return frame(m,`<div class="card"><div class="q">${E(it[0])}</div><div class="ni" id="nf"><input id="nv" type="text" inputmode="decimal" autocomplete="off" placeholder="Число" ${res?'disabled value="'+E(res.v)+'"':''}><button type="button" class="btn" id="ckn" ${res?'disabled':''}>Проверить</button></div>${res?fb(res.ok,it[2]):''}${nxt(res,last)}</div>`)}
+function rOrd(m){const it=m.items[S[cur].i],last=S[cur].i==m.items.length-1;if(!ord.length)ord=[3,0,5,2,1,4];
+return frame(m,`<div class="card"><div class="q">${E(it.q)}</div><div class="an">${ord.map((v,k)=>`<div class="od"><b>${k+1}</b><span>${E(it.s[v])}</span><button data-u="${k}" ${res||k==0?'disabled':''}>↑</button><button data-d="${k}" ${res||k==5?'disabled':''}>↓</button></div>`).join('')}</div>${bad&&!res?'<div class="fb b">Порядок пока неверный. Подумай ещё!</div>':''}${res?fb(1,'Порядок: нагрев → переход → нагрев → переход → нагрев.'):`<div class="nx"><button class="btn" id="ck">Проверить</button></div>`}${res?nxt(1,last):''}</div>`)}
+function rMatch(m){const sv=S[cur].sv,rs=[5,2,7,0,4,6,1,3];
+const b=(a,c)=>a.map(k=>`<button class="mi ${sv.includes(k)?'so':''} ${c&&pick===k?'sel':''}" data-k="${k}" ${sv.includes(k)?'disabled':''}>${E(m.items[k][c?0:1])}${sv.includes(k)?' ✓':''}</button>`).join('');
+return frame(m,`<div class="card"><div class="mg an"><div id="lf">${b([0,1,2,3,4,5,6,7],1)}</div><div id="rt">${b(rs,0)}</div></div></div>`)}
+function home(){return `<div class="hero"><span class="flo" style="right:6%;top:55%">🧊</span><span class="flo" style="right:15%;top:8%;animation-delay:.6s">🔥</span><span class="flo" style="right:24%;top:68%;animation-delay:1.2s">💧</span><span class="flo" style="right:33%;top:20%;animation-delay:1.8s">☁️</span><span class="tag">6 КЛАСС · 10 МИССИЙ</span><h1>ТЕРМО<span style="color:#fff4a8">ЛАБОРАТОРИЯ</span></h1><p>Плавление, кипение и состояния вещества. Сумеешь пройти все миссии вместе с Термиком?</p><button class="btn pl" id="st" style="margin-top:14px">Начать →</button></div><div class="card"><h2>🧠 Главное правило</h2><p style="font-size:19px;line-height:1.55">Сравни температуру с <b>Tпл</b> и <b>Tкип</b>: ниже Tпл — твёрдое, между ними — жидкое, выше Tкип — газ.</p></div><div class="card"><h2>📋 Справочник (1 атм)</h2>${tbl()}</div>`}
+const tbl=()=>`<table><tr><th>Вещество</th><th>Tпл, °C</th><th>Tкип, °C</th></tr>${Object.values(SUB).map(s=>`<tr><td><b>${s[0]}</b></td><td>${s[1]}</td><td>${s[2]}</td></tr>`).join('')}</table>`;
+function end(m){return `<div class="card end"><span class="tr">${cur==9?'🏆':'🎉'}</span><h2>${E(m.n)}: готово!</h2><p style="font-size:20px">Баллов за миссию: <b>${S[cur].h}</b> из ${m.items.length}. Всего: ★ ${total()}</p><button class="btn pl" id="ct">${dn()==M.length?'На главную':'Следующая миссия →'}</button></div>`}
+function render(fresh){nav();$('#score').textContent='★ '+total();const m=M[cur];
+ $('#main').className=fresh?'enter':'';
+ $('#main').innerHTML=cur<0?home():S[cur].done?end(m):({quiz:rQuiz,num:rNum,ord:rOrd,match:rMatch})[m.t](m);
+ if(fresh&&cur>=0&&S[cur].done){say('Миссия пройдена! 🏆','happy');boom(120)}bind()}
+function score(ok){if(ok)S[cur].h++;const sc=$('#score');sc.classList.remove('pop');void sc.offsetWidth;sc.classList.add('pop')}
+function react(ok){if(ok){say(R(['Супер! 🎉','Точно! ⭐','Молодец!','Класс! 🔥','Верно! 👏']),'happy');boom(26)}else say(R(['Ничего, подумай ещё!','Почти! Давай разберём','Ошибки учат! 💡']),'sad')}
+function adv(){const s=S[cur];s.i++;res=null;ord=[];bad=0;if(s.i>=M[cur].items.length)s.done=true;render(1);scrollTo(0,0)}
+function bind(){const m=M[cur];
+ $('#st')&&($('#st').onclick=()=>go(0));$('#ct')&&($('#ct').onclick=()=>go(dn()==M.length?-1:S.findIndex(s=>!s.done)));
+ $('#nx')&&($('#nx').onclick=adv);
+ document.querySelectorAll('[data-m]').forEach(b=>b.onclick=()=>go(+b.dataset.m));
+ if(!m||S[cur].done)return;
+ if(m.t=='quiz')document.querySelectorAll('[data-c]').forEach(b=>b.onclick=()=>{if(res)return;const p=+b.dataset.c,ok=p==m.items[S[cur].i].r;res={ok,p};score(ok);render();react(ok)});
+ if(m.t=='num'){const chk=()=>{if(res)return;const raw=$('#nv').value.replace(/[\s\u00a0]/g,'').replace(',','.').replace(/[−–—]/g,'-'),n=Number(raw);if(raw===''||isNaN(n)){say('Введи число, например 100','sad');$('#nv').focus();return}const ok=Math.abs(n-m.items[S[cur].i][1])<.01;res={ok,v:raw};score(ok);render();react(ok)};$('#ckn').onclick=chk;$('#nv').onkeydown=e=>{if(e.key==='Enter')chk()};if(!res)$('#nv').focus()}
+ if(m.t=='ord'){document.querySelectorAll('[data-u]').forEach(b=>b.onclick=()=>{const k=+b.dataset.u;[ord[k-1],ord[k]]=[ord[k],ord[k-1]];bad=0;render()});document.querySelectorAll('[data-d]').forEach(b=>b.onclick=()=>{const k=+b.dataset.d;[ord[k+1],ord[k]]=[ord[k],ord[k+1]];bad=0;render()});
+  const c=$('#ck');c&&(c.onclick=()=>{const ok=ord.every((x,k)=>x==k);if(ok){res={ok:1};score(!bad);render();react(1)}else{bad=1;render();react(0)}})}
+ if(m.t=='match'){document.querySelectorAll('#lf [data-k]').forEach(b=>b.onclick=()=>{pick=+b.dataset.k;document.querySelectorAll('#lf [data-k]').forEach(x=>x.classList.toggle('sel',+x.dataset.k==pick))});
+  document.querySelectorAll('#rt [data-k]').forEach(b=>b.onclick=()=>{if(pick===null){say('Сначала выбери понятие слева','sad');return}
+   if(+b.dataset.k==pick){const s=S[cur];s.sv.push(pick);s.h++;s.i=s.sv.length;pick=null;if(s.i>=m.items.length)s.done=true;render(s.done);react(1)}
+   else{b.classList.add('wr');setTimeout(()=>b.classList.remove('wr'),500);react(0)}})}}
+const fx=document.createElement('div');fx.className='fx';
+['❄️','💧','☁️','🔥','🧊','✨','🌡️','💦'].forEach(e=>{for(let k=0;k<2;k++){const s=document.createElement('span');s.textContent=e;s.style.cssText=`left:${Math.random()*100}%;font-size:${20+Math.random()*26}px;animation-duration:${12+Math.random()*14}s;animation-delay:${-Math.random()*20}s;--dx:${Math.random()*160-80}px`;fx.appendChild(s)}});
+document.body.prepend(fx);
+const mc=document.createElement('div');mc.id='mascot';
+mc.innerHTML='<div id="bub"></div><svg viewBox="0 0 100 140"><rect x="38" y="6" width="24" height="96" rx="12" fill="#fff" stroke="#bfe0ff" stroke-width="3"/><rect x="45" y="44" width="10" height="60" rx="5" fill="#ff4d6d"/><circle cx="50" cy="106" r="28" fill="#ff4d6d" stroke="#fff" stroke-width="3"/><circle cx="41" cy="102" r="6" fill="#fff"/><circle cx="59" cy="102" r="6" fill="#fff"/><circle cx="42" cy="103" r="3" fill="#222"/><circle cx="60" cy="103" r="3" fill="#222"/><circle cx="34" cy="112" r="4" fill="#ff9ab0"/><circle cx="66" cy="112" r="4" fill="#ff9ab0"/><path class="m1" d="M42 115q8 7 16 0" stroke="#fff" stroke-width="3" fill="none" stroke-linecap="round"/><path class="m2" d="M40 113q10 14 20 0z" fill="#7a1030"/><path class="m3" d="M42 121q8-7 16 0" stroke="#fff" stroke-width="3" fill="none" stroke-linecap="round"/></svg>';
+document.body.appendChild(mc);
+let bt,mt;
+function say(t,mood){$('#bub').textContent=t;mc.className='say'+(mood?' '+mood:'');clearTimeout(bt);clearTimeout(mt);mt=setTimeout(()=>mc.classList.remove('happy','sad'),900);bt=setTimeout(()=>mc.classList.remove('say'),2800)}
+function boom(n){const c=['#ff6fae','#ffe56f','#5fd9f2','#60e1b7','#a78bfa','#ff9f43'];for(let i=0;i<n;i++){const s=document.createElement('i');s.className='cf';const w=6+Math.random()*9;s.style.cssText=`left:${Math.random()*100}vw;width:${w}px;height:${w*1.6}px;background:${R(c)};border-radius:2px;animation-duration:${2+Math.random()*2.2}s;animation-delay:${Math.random()*.5}s;--dx:${Math.random()*200-100}px;--r:${Math.random()*900}deg`;document.body.appendChild(s);setTimeout(()=>s.remove(),5000)}}
+$('#tbl').onclick=()=>{$('#mb').innerHTML=tbl();$('#ov').classList.add('open')};
+$('#cl').onclick=()=>$('#ov').classList.remove('open');
+$('#ov').onclick=e=>{if(e.target.id=='ov')$('#ov').classList.remove('open')};
+$('#rst').onclick=()=>{if(confirm('Начать всё заново?')){reset();render(1)}};
+$('#full').onclick=async()=>{try{document.fullscreenElement?await document.exitFullscreen():await document.documentElement.requestFullscreen()}catch(e){}};
+render(1);setTimeout(()=>say('Привет! Я Термик 🌡️','happy'),600);
+</script></body></html>
